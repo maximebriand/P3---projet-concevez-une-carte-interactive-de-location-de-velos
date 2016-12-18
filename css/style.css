@@ -46,15 +46,20 @@ section.explain .wrapper {height: 100%;}
 section.explain div.slider {position: relative; height: 100%;}
 section.explain .arrow {
 	position: absolute;
-	width: 14px;
+	width: 60px;
 	font-size: 40px;
 	color: #fff;
 	text-decoration: none;
 	cursor: pointer;
 	top: calc(50% - 40px); /*item height/2 + (padding from the section - header height)*/
+	display: block;
 }
 
-section.explain .next {right: 0;}
+section.explain .next {
+	right: 0;
+	text-align: right;
+}
+
 section.explain .previous {left: 0;}
 section.explain ul.slider {
 	display: flex;
