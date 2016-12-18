@@ -27,6 +27,7 @@ header .logo {
 header nav {line-height: 70px;}
 header nav ul {display: flex;}
 header nav li {margin-left: 25px;}
+header nav li a {text-decoration: none;}
 header nav li a:hover {
 	text-decoration: none;
 	border-bottom: 1px solid #97bf1b;
@@ -39,6 +40,12 @@ h1 {
 	margin-bottom: 50px;
 }
 
+h2{
+	font-size: 20px;
+	color: #fff;
+	font-weight: 700;
+	margin-bottom: 25px;
+}
 section.explain	{
 	position: relative;
 	color: #e0dcdc;
@@ -78,7 +85,6 @@ section.explain ul.slider li {
 	display: none;
 	background: #6b2222;
 }
-section.explain ul.slider li:seconde-child{background: blue;}
 section.explain ul.slider_nav {
 	position: absolute;
 	display: flex;
@@ -98,3 +104,13 @@ section.explain ul.slider_nav li.slider_nav {
 }
 
 section.explain ul.slider_nav li.slider_nav.active {background: #e0dcdc;}
+
+section.map {
+	background: #97bf1b;
+	height: 90vh;
+}
+section.map .wrapper,
+div#map {height: 90%;}
+
+section.map .wrapper {padding-top:25px;}
+

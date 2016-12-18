@@ -38,3 +38,14 @@ function displaySlide(n) {
     }
     $(numberSlides[slideIndex - 1]).show(100, "linear");
 }
+
+
+//MAP
+
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 48.866667, lng: 2.333333},
+    zoom: 12
+  });
+}
