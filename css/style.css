@@ -33,7 +33,11 @@ header nav li a:hover {
 	color: #97bf1b;
 }
 
-
+h1 {
+	font-size: 25px;
+	font-weight: 700;
+	margin-bottom: 50px;
+}
 
 section.explain	{
 	position: relative;
@@ -41,6 +45,7 @@ section.explain	{
 	padding-top: 120px;
 	background: #ab3636;
 	height: 90vh;
+	overflow: hidden;
 }
 section.explain .wrapper {height: 100%;}
 section.explain div.slider {position: relative; height: 100%;}
@@ -51,7 +56,7 @@ section.explain .arrow {
 	color: #fff;
 	text-decoration: none;
 	cursor: pointer;
-	top: calc(50% - 40px); /*item height/2 + (padding from the section - header height)*/
+	top: calc(50% - 75px); /*item height/2 + (padding from the section and the li - header height)*/
 	display: block;
 }
 
@@ -64,13 +69,16 @@ section.explain .previous {left: 0;}
 section.explain ul.slider {
 	display: flex;
 	width: 400%; /*100% per slide*/
-	padding: 20px 100px; 
 }
 section.explain ul.slider li {
 	position: relative;
-	width: 100%;
+	width: 1100px;
+	min-height: 300px;
+	padding: 70px;
 	display: none;
+	background: #6b2222;
 }
+section.explain ul.slider li:seconde-child{background: blue;}
 section.explain ul.slider_nav {
 	position: absolute;
 	display: flex;
