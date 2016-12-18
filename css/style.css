@@ -112,5 +112,15 @@ section.map {
 section.map .wrapper,
 div#map {height: 90%;}
 
+div#map {
+	width: 60%;
+	float: left;
+}
 section.map .wrapper {padding-top:25px;}
 
+aside {
+	float: right;
+	width: 35%;
+	height: 90%;
+	background: red;
+}
