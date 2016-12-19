@@ -64,6 +64,10 @@ section.explain .arrow {
 	text-decoration: none;
 	cursor: pointer;
 	top: calc(50% - 75px); /*item height/2 + (padding from the section and the li - header height)*/
+		top: -moz-calc(50% - 75px);
+		top: -o-calc(50% - 75px);
+		top: -webkit-calc(50% - 75px);
+		top: -ms-calc(50% - 75px);
 	display: block;
 }
 
@@ -91,6 +95,10 @@ section.explain ul.slider_nav {
 	justify-content: center;
 	bottom: 20px;
 	left: calc(50% - 60px); /*-XXpx where XX = ul size/2*/
+		left: -moz-calc(50% - 60px);
+		left: -o-calc(50% - 60px);
+		left: -webkit-calc(50% - 60px);
+		left: -ms-calc(50% - 60px);
 }
 
 section.explain ul.slider_nav li.slider_nav {
@@ -120,8 +128,12 @@ section.map .wrapper {padding-top:25px;}
 
 aside {
 	float: right;
-	width: 35%;
-	height: 90%;
+	width: 30%;
+	height: calc(90% - 50px);
+		height: -moz-calc(90% - 50px);
+		height: -o-calc(90% - 50px);
+		height: -webkit-calc(90% - 50px);
+		height: -ms-calc(90% - 50px);
 	background: #00abc6;
 	color: #fff;
 	padding: 25px; 
