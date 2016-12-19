@@ -39,15 +39,36 @@ function displaySlide(n) {
     $(numberSlides[slideIndex - 1]).show(100, "linear");
 }
 
-
 //MAP
-
 var map;
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
+  var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 48.866667, lng: 2.333333},
-    zoom: 12
+    zoom: 15
   });
+  var infoWindow = new google.maps.InfoWindow({map: map});
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Vous êtes ici.');
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+
+
+
 
 
 var velibJSON;
@@ -80,14 +101,15 @@ $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee252
 
         var infocontent = $('aside');
         marker.addListener('click', function() {
+            infocontent.empty();
             infocontent.append(
-                "Station : <span>" + name + "</span></p>"
-                + "<p>La station est <span>" + status + "</span></p>"
-                + "<p>Adresse : <span class=\"address\">" + address + "</span></p>"
-                + "<p><span class=\"places\">" + places + "</span> de places à cette station</p>"
-                + "<p><span class=\"available_bikes\">" + availableBikes + "</span> vélos sont disponibles</p>"
-                + "<p><span>" + availableBikeStands + "</span> emplacements sont libres</p>"
-                + "<p>Le paiement à cette station est <span>" + banking + "</span></p>"
+                "<p class=\"available_bikes\">Station : <span>" + name + "</span></p>"
+                + "<p class=\"available_bikes\">La station est <span>" + status + "</span></p>"
+                + "<p class=\"available_bikes\">Adresse : <span>" + address + "</span></p>"
+                + "<p class=\"available_bikes\"><span>" + places + "</span> de places à cette station</p>"
+                + "<p class=\"available_bikes\"><span>" + availableBikes + "</span> vélos sont disponibles</p>"
+                + "<p class=\"available_bikes\"><span>" + availableBikeStands + "</span> emplacements sont libres</p>"
+                + "<p class=\"available_bikes\">Le paiement à cette station est <span>" + banking + "</span></p>"
             );
         });
         // To add the marker to the map, call setMap();
@@ -102,13 +124,13 @@ $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee252
 //VELIB
 
 // API KEY= 1ee25283f155079a4b54ddab39eac6d733b1fa49
-var velibJSON;
+// var velibJSON;
 
-$.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function( json ) {
-    velibJSON = json;
-    $.each(velibJSON, function(){
-        console.log(this);
-    });
-});
+// $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function( json ) {
+//     velibJSON = json;
+//     $.each(velibJSON, function(){
+//         console.log(this);
+//     });
+// });
 
 
