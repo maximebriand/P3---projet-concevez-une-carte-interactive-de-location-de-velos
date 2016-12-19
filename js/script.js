@@ -103,8 +103,25 @@ function initMap() {
             var infocontent = $('aside');
             marker.addListener('click', function() {
                 infocontent.empty();
+                var placesDescription, availableBikesDescription, availableBikeStandsDescription;
+                if ( places <= 1 ){ placesDescription = "</span> place à cette station</li>" }
+                    else { placesDescription = "</span> places à cette station</li>" };
+
+                if (availableBikes <= 1 ) {availableBikesDescription = "</span> vélo de disponible</li>" }
+                    else {availableBikesDescription = "</span> vélos sont disponibles</li>"};
+
+                if ( availableBikeStands <= 1 ) { availableBikeStandsDescription = "</span> emplacement de libre</li>" }
+                    else { availableBikeStandsDescription = "</span> emplacements sont libres</li>" }
+
                 infocontent.append(
-                    "<p class=\"available_bikes\">Station : <span>" + name + "</span></p>" + "<p class=\"available_bikes\">La station est <span>" + status + "</span></p>" + "<p class=\"available_bikes\">Adresse : <span>" + address + "</span></p>" + "<p class=\"available_bikes\"><span>" + places + "</span> de places à cette station</p>" + "<p class=\"available_bikes\"><span>" + availableBikes + "</span> vélos sont disponibles</p>" + "<p class=\"available_bikes\"><span>" + availableBikeStands + "</span> emplacements sont libres</p>" + "<p class=\"available_bikes\">Le paiement à cette station est <span>" + banking + "</span></p>" + "<button class=\"booking\">Réserver un vélo</button>"
+                    "<h3 class=\"available_bikes\">Station : <span>" + name + "</span></h3> <ul>" +
+                    "<li class=\"available_bikes\">La station est <span>" + status + "</span></li>" +
+                    "<li class=\"available_bikes\">Adresse : <span>" + address + "</span></li>" +
+                    "<li class=\"available_bikes\"><span>" + places + " " + placesDescription +
+                    "<li class=\"available_bikes\"><span>" + availableBikes + " " + availableBikesDescription +
+                    "<li class=\"available_bikes\"><span>" + availableBikeStands + " " + availableBikeStandsDescription +
+                    "<li class=\"available_bikes\">Le paiement à cette station est <span>" + banking + "</span></li></ul>" +
+                    "<button class=\"booking\">Réserver un vélo</button>"
                 );
 
                 //BOOKING FUNCTION

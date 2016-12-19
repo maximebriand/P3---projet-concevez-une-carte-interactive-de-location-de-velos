@@ -122,8 +122,15 @@ aside {
 	float: right;
 	width: 35%;
 	height: 90%;
-	background: red;
+	background: #00abc6;
+	color: #fff;
+	padding: 25px; 
 }
 
+h3 {
+	font-size: 18px;
+	font-weight: 700;
+	margin-bottom: 25px;
+}
 
-
+aside li {margin-bottom: 10px;}
