@@ -44,7 +44,7 @@ function displaySlide(n) {
 
 
 //MAP
-var map, velibJSON;
+var map, velibJSON, marker;
 
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -86,6 +86,10 @@ function initMap() {
                 title: this.address
             });
 
+              marker.addListener('click', function() {
+                canvas.style.display = "none";
+              });
+
             var address, places, availableBikes, availableBikeStands, banking, bonus, name;
             address = this.address;
             places = this.bike_stands;
@@ -100,7 +104,7 @@ function initMap() {
 
             if (status === "OPEN") { status = "ouverte" } else { status = "fermée" };
 
-            var infocontent = $('aside');
+            var infocontent = $('aside div.content');
             marker.addListener('click', function() {
                 infocontent.empty();
                 var placesDescription, availableBikesDescription, availableBikeStandsDescription;
@@ -138,12 +142,14 @@ function initMap() {
 
 //BOOK A VELIB FUNCTION
 function bookVelib(station) {
-    var footer, bookingButton, bookedBike, bookingLimit;
+    var footer, bookingButton, bookedBike, bookingLimit, canvas;
     footer = $('footer');
     bookingButton = $('.booking'),
-        bookingLimit = "20min";
+    bookingLimit = "20min";
+    canvas = $('#canvas');
 
     bookingButton.click(function() {
+        canvas.show();
         if (bookedBike === station) {
             alert("vous avez déjà réservé un Velib à cette station !");
         } else {
@@ -152,23 +158,78 @@ function bookVelib(station) {
             setInterval(countdown(), 1000)
         }
     });
+
+
 };
 
 
-//FUNCTION COUNTDOWN
+//CANVAS
+//http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-simple
+var canvas, context;
+canvas = $('#canvas')[0];
+context = canvas.getContext('2d');
+
+$('#canvas').mousedown(function(e){
+  var mouseX = e.pageX - this.offsetLeft;
+  var mouseY = e.pageY - this.offsetTop;
+        
+  paint = true;
+  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+  redraw();
+});
+$('#canvas').mousemove(function(e){
+  if(paint){
+    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+    redraw();
+  }
+});
+$('#canvas').mouseup(function(e){
+  paint = false;
+});
+$('#canvas').mouseleave(function(e){
+  paint = false;
+});
+var clickX = new Array();
+var clickY = new Array();
+var clickDrag = new Array();
+var paint;
+
+function addClick(x, y, dragging)
+{
+  clickX.push(x);
+  clickY.push(y);
+  clickDrag.push(dragging);
+}
+function redraw(){
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+  
+  context.strokeStyle = "#333";
+  context.lineJoin = "round";
+  context.lineWidth = 5;
+            
+  for(var i=0; i < clickX.length; i++) {        
+    context.beginPath();
+    if(clickDrag[i] && i){
+      context.moveTo(clickX[i-1], clickY[i-1]);
+     }else{
+       context.moveTo(clickX[i]-1, clickY[i]);
+     }
+     context.lineTo(clickX[i], clickY[i]);
+     context.closePath();
+     context.stroke();
+  }
+}
 
 
 
-//VELIB
 
-// API KEY= 1ee25283f155079a4b54ddab39eac6d733b1fa49
-// var velibJSON;
 
-// $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function( json ) {
-//     velibJSON = json;
-//     $.each(velibJSON, function(){
-//         console.log(this);
-//     });
-// });
+
+
+
+
+
+
+
 
 

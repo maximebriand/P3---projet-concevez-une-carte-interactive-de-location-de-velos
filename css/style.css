@@ -146,3 +146,21 @@ h3 {
 }
 
 aside li {margin-bottom: 10px;}
+
+aside button {
+	background: #04404a;
+	color: #fff;
+	border: none;
+	padding: 15px;
+	font-size: 16px;
+	margin: 45px 0;
+	cursor: pointer;
+}
+
+canvas#canvas {
+	display: none;
+	background: #fff;
+	cursor: pointer;
+}
+
+
