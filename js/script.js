@@ -144,26 +144,47 @@ function initMap() {
 
 //BOOK A VELIB FUNCTION
 function bookVelib(station) {
-    var footer, bookingButton, bookedBike, bookingLimit, canvas;
+    var footer, bookingButton, bookingLimit, canvas;
     footer = $('footer');
     bookingButton = $('.booking'),
     bookingLimit = "20min";
     canvas = $('#canvas');
 
+
     bookingButton.click(function() {
         canvas.show();
         signBtn.show();
-        if (bookedBike === station) {
+        if (sessionStorage.getItem("station") === station) {
             alert("vous avez déjà réservé un Velib à cette station !");
         } else {
-            bookedBike = station
-            footer.append("<p>1 vélo réservé à la station " + station + " pour <span class=\"countdown\"></span>")
-            setInterval(countdown(), 1000)
+            sessionStorage.setItem("station", station);
+            bookingLimit = 20 * 60;
+            setTimeout(function() { sessionStorage.clear(); }, (bookingLimit));
+            setTimeout(countDown, 1000);
+
+            function countDown() {
+                bookingLimit--;
+                if (bookingLimit > 0) {
+                    setTimeout(countDown, 1000);
+                }
+                var minutes = Math.floor(bookingLimit / 60);
+                var seconds = bookingLimit - minutes * 60;
+
+                minutesSpan = $('#minutes');
+                secondsSpan = $('#seconds');
+                minutesSpan.html(minutes);
+                secondsSpan.html(seconds);
+
+            }
+
+            footer.append("<p>1 vélo réservé à la station " + station + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes")
+
         }
     });
 
 
-};
+    };
+
 
 
 //CANVAS
