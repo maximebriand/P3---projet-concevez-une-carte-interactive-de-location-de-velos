@@ -44,7 +44,8 @@ function displaySlide(n) {
 
 
 //MAP
-var map, velibJSON, marker;
+var map, velibJSON, marker, infocontent;
+infocontent = $('aside div.content');
 
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -88,6 +89,7 @@ function initMap() {
 
               marker.addListener('click', function() {
                 canvas.style.display = "none";
+                signBtn[0].style.display = "none";
               });
 
             var address, places, availableBikes, availableBikeStands, banking, bonus, name;
@@ -104,7 +106,7 @@ function initMap() {
 
             if (status === "OPEN") { status = "ouverte" } else { status = "fermée" };
 
-            var infocontent = $('aside div.content');
+            
             marker.addListener('click', function() {
                 infocontent.empty();
                 var placesDescription, availableBikesDescription, availableBikeStandsDescription;
@@ -150,6 +152,7 @@ function bookVelib(station) {
 
     bookingButton.click(function() {
         canvas.show();
+        signBtn.show();
         if (bookedBike === station) {
             alert("vous avez déjà réservé un Velib à cette station !");
         } else {
@@ -165,65 +168,70 @@ function bookVelib(station) {
 
 //CANVAS
 //http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-simple
-var canvas, context;
+var canvas, context, signBtn;
 canvas = $('#canvas')[0];
+signBtn = $('#sign');
 context = canvas.getContext('2d');
 
-$('#canvas').mousedown(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
-  var mouseY = e.pageY - this.offsetTop;
-        
-  paint = true;
-  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
-  redraw();
-});
-$('#canvas').mousemove(function(e){
-  if(paint){
-    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+$('#canvas').mousedown(function(e) {
+    var mouseX = e.pageX - this.offsetLeft;
+    var mouseY = e.pageY - this.offsetTop;
+
+    paint = true;
+    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
     redraw();
-  }
 });
-$('#canvas').mouseup(function(e){
-  paint = false;
+$('#canvas').mousemove(function(e) {
+    if (paint) {
+        addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+        redraw();
+    }
 });
-$('#canvas').mouseleave(function(e){
-  paint = false;
+$('#canvas').mouseup(function(e) {
+    paint = false;
+});
+$('#canvas').mouseleave(function(e) {
+    paint = false;
 });
 var clickX = new Array();
 var clickY = new Array();
 var clickDrag = new Array();
 var paint;
 
-function addClick(x, y, dragging)
-{
-  clickX.push(x);
-  clickY.push(y);
-  clickDrag.push(dragging);
-}
-function redraw(){
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
-  
-  context.strokeStyle = "#333";
-  context.lineJoin = "round";
-  context.lineWidth = 5;
-            
-  for(var i=0; i < clickX.length; i++) {        
-    context.beginPath();
-    if(clickDrag[i] && i){
-      context.moveTo(clickX[i-1], clickY[i-1]);
-     }else{
-       context.moveTo(clickX[i]-1, clickY[i]);
-     }
-     context.lineTo(clickX[i], clickY[i]);
-     context.closePath();
-     context.stroke();
-  }
+function addClick(x, y, dragging) {
+    clickX.push(x);
+    clickY.push(y);
+    clickDrag.push(dragging);
 }
 
+function redraw() {
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+
+    context.strokeStyle = "#333";
+    context.lineJoin = "round";
+    context.lineWidth = 5;
+
+    for (var i = 0; i < clickX.length; i++) {
+        context.beginPath();
+        if (clickDrag[i] && i) {
+            context.moveTo(clickX[i - 1], clickY[i - 1]);
+        } else {
+            context.moveTo(clickX[i] - 1, clickY[i]);
+        }
+        context.lineTo(clickX[i], clickY[i]);
+        context.closePath();
+        context.stroke();
+    }
+}
+
+function clearCanvas() {
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+}
 
 
-
-
+signBtn.click(function() {
+    clearCanvas();
+})
 
 
 

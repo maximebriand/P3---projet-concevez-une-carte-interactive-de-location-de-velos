@@ -147,20 +147,21 @@ h3 {
 
 aside li {margin-bottom: 10px;}
 
-aside button {
+aside button, #sign {
 	background: #04404a;
 	color: #fff;
 	border: none;
 	padding: 15px;
 	font-size: 16px;
-	margin: 45px 0;
+	margin: 25px 0;
 	cursor: pointer;
 }
-
+#sign {display: none;}
 canvas#canvas {
 	display: none;
 	background: #fff;
 	cursor: pointer;
 }
 
+ 
 
