@@ -42,7 +42,6 @@ function displaySlide(n) {
 
 
 
-sessionStorage.setItem("station", "");
 //MAP
 var map, velibJSON, marker, infocontent;
 infocontent = $('aside div.content');
@@ -89,7 +88,7 @@ function initMap() {
 
               marker.addListener('click', function() {
                 canvas.style.display = "none";
-                signBtn[0].style.display = "none";
+                signBouton[0].style.display = "none";
               });
 
             var address, places, availableBikes, availableBikeStands, banking, bonus, name;
@@ -141,64 +140,67 @@ function initMap() {
     });
 
 } 
-sessionStorage.setItem("station", "");
 
+var bookingLimit = 20 * 60;
 //BOOK A VELIB FUNCTION
 function bookVelib(station) {
-    var footer, bookingButton, bookingLimit, canvas;
+    var footer, bookingButton, canvas;
     footer = $('footer div.wrapper');
     bookingButton = $('.booking'),
-    bookingLimit = "20min";
     canvas = $('#canvas');
     
 
     bookingButton.click(function() {
         canvas.show();
-        signBtn.show();
+        signBouton.show();
+    });
 
-        if (sessionStorage.getItem("station") === station) {
+    signBouton.click(function() {
+    clearCanvas();
+    if (localStorage.getItem("station") === station) {
             alert("vous avez déjà réservé un Velib à cette station !");
 
         } else {
-            sessionStorage.setItem("station", station);
+            localStorage.setItem("station", station);
 
-            bookingLimit = 20 * 60;
-            sessionStorage.clear();
+            
+
 
             footer.html();
-            setTimeout(function() { sessionStorage.removeItem("station"); }, (bookingLimit));
+
             setTimeout(countDown, 1000);
 
-            function countDown() {
-                bookingLimit--;
-                if (bookingLimit > 0) {
-                    setTimeout(countDown, 1000);
-                }
-                var minutes = Math.floor(bookingLimit / 60);
-                var seconds = bookingLimit - minutes * 60;
 
-                minutesSpan = $('#minutes');
-                secondsSpan = $('#seconds');
-                minutesSpan.html(minutes);
-                secondsSpan.html(seconds);
-
-            }
 
             footer.append("<p>1 vélo réservé à la station " + station + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes")
 
         }
     });
+    return localStorage.getItem("station");
+
+};
 
 
-    };
+function countDown() {
+    bookingLimit--;
+    if (bookingLimit > 0) {
+        setTimeout(countDown, 1000);
+    }
+    var minutes = Math.floor(bookingLimit / 60);
+    var seconds = bookingLimit - minutes * 60;
 
+    minutesSpan = $('#minutes');
+    secondsSpan = $('#seconds');
+    minutesSpan.html(minutes);
+    secondsSpan.html(seconds);
 
+}
 
 //CANVAS
 //http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-simple
-var canvas, context, signBtn;
+var canvas, context, signBouton;
 canvas = $('#canvas')[0];
-signBtn = $('#sign');
+signBouton = $('#sign');
 context = canvas.getContext('2d');
 
 $('#canvas').mousedown(function(e) {
@@ -257,12 +259,12 @@ function clearCanvas() {
 }
 
 
-signBtn.click(function() {
-    clearCanvas();
+
+//debug function :)
+
+$('#console').click(function(){
+    console.log(localStorage.getItem("station"));
 })
-
-
-
 
 
 
