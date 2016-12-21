@@ -42,7 +42,7 @@ function displaySlide(n) {
 
 
 
-
+sessionStorage.setItem("station", "");
 //MAP
 var map, velibJSON, marker, infocontent;
 infocontent = $('aside div.content');
@@ -141,25 +141,32 @@ function initMap() {
     });
 
 } 
+sessionStorage.setItem("station", "");
 
 //BOOK A VELIB FUNCTION
 function bookVelib(station) {
     var footer, bookingButton, bookingLimit, canvas;
-    footer = $('footer');
+    footer = $('footer div.wrapper');
     bookingButton = $('.booking'),
     bookingLimit = "20min";
     canvas = $('#canvas');
-
+    
 
     bookingButton.click(function() {
         canvas.show();
         signBtn.show();
+
         if (sessionStorage.getItem("station") === station) {
             alert("vous avez déjà réservé un Velib à cette station !");
+
         } else {
             sessionStorage.setItem("station", station);
+
             bookingLimit = 20 * 60;
-            setTimeout(function() { sessionStorage.clear(); }, (bookingLimit));
+            sessionStorage.clear();
+
+            footer.html();
+            setTimeout(function() { sessionStorage.removeItem("station"); }, (bookingLimit));
             setTimeout(countDown, 1000);
 
             function countDown() {
