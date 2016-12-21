@@ -42,6 +42,18 @@ function displaySlide(n) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 //MAP
 var map, velibJSON, marker, infocontent;
 infocontent = $('aside div.content');
@@ -141,14 +153,22 @@ function initMap() {
 
 } 
 
+
+
+
+
+
+
+
+
 var bookingLimit = 20 * 60;
+var footer = $('footer div.wrapper');
+
 //BOOK A VELIB FUNCTION
 function bookVelib(station) {
-    var footer, bookingButton, canvas;
-    footer = $('footer div.wrapper');
+    var bookingButton, canvas;
     bookingButton = $('.booking'),
     canvas = $('#canvas');
-    
 
     bookingButton.click(function() {
         canvas.show();
@@ -157,29 +177,37 @@ function bookVelib(station) {
 
     signBouton.click(function() {
     clearCanvas();
-    if (localStorage.getItem("station") === station) {
+    if (sessionStorage.getItem("station") === station) {
             alert("vous avez déjà réservé un Velib à cette station !");
-
         } else {
-            localStorage.setItem("station", station);
-
-            
-
-
+            sessionStorage.setItem("station", station);
+            sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
             footer.html();
-
             setTimeout(countDown, 1000);
-
-
-
-            footer.append("<p>1 vélo réservé à la station " + station + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes")
-
+            displayBookingInfo();
         }
     });
-    return localStorage.getItem("station");
-
 };
 
+
+function displayBookingInfo() {
+    footer.append("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
+}
+
+var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
+// IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
+if ( bookingPastTime < bookingLimit ) {
+    bookingLimit = bookingLimit - Math.round(bookingPastTime);
+    setTimeout(countDown, 1000);
+    displayBookingInfo();
+
+} else {
+ alert("coucou");
+}
+
+
+
+        
 
 function countDown() {
     bookingLimit--;
@@ -192,9 +220,31 @@ function countDown() {
     minutesSpan = $('#minutes');
     secondsSpan = $('#seconds');
     minutesSpan.html(minutes);
-    secondsSpan.html(seconds);
-
+    secondsSpan.html(seconds);  
+    
 }
+
+
+
+
+
+
+
+
+
+//debug function :)
+
+$('#console').click(function(){
+    // console.log(sessionStorage.getItem("station"));
+    // console.log(sessionStorage.getItem("bookingDate"));
+    console.log("bookingPastTime " + bookingPastTime);
+    console.log("bookingLimit " + bookingLimit);
+})
+
+
+
+
+
 
 //CANVAS
 //http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-simple
@@ -260,11 +310,6 @@ function clearCanvas() {
 
 
 
-//debug function :)
-
-$('#console').click(function(){
-    console.log(localStorage.getItem("station"));
-})
 
 
 
