@@ -19,11 +19,12 @@ var selectedStationID, data, i, marker, velibJson;
             for (var i = 0, length = json.length; i < length; i++) {
                 var data = json[i],
                     latLng = new google.maps.LatLng(json[i].position.lat, json[i].position.lng);
-
+                var image = "css/img/pin_velib_small.png";
                 // Creating a marker and putting it on the map
                 var marker = new google.maps.Marker({
                     position: latLng,
                     map: map,
+                    icon: image,
                     title: data.name,
                     id: i
                 });
@@ -34,7 +35,9 @@ var selectedStationID, data, i, marker, velibJson;
 
                     // Attaching a click event to the current marker
  					google.maps.event.addListener(marker, "click", function(e) {
-						
+						$('aside div.content').html();
+						$('#sign').hide();
+						$('#canvas').hide();
 						var address, places, availableBikes, availableBikeStands, banking, bonus, name;
 						address = json.address;
 						places = json.bike_stands;
@@ -53,10 +56,10 @@ var selectedStationID, data, i, marker, velibJson;
                         var placesDescription, availableBikesDescription, availableBikeStandsDescription;
                         
                         if (places <= 1) { placesDescription = "</span> place à cette station</li>" } else { placesDescription = "</span> places à cette station</li>" };
-
                         if (availableBikes <= 1) { availableBikesDescription = "</span> vélo de disponible</li>" } else { availableBikesDescription = "</span> vélos sont disponibles</li>" };
-
                         if (availableBikeStands <= 1) { availableBikeStandsDescription = "</span> emplacement de libre</li>" } else { availableBikeStandsDescription = "</span> emplacements sont libres</li>" }
+						if (banking === true) { banking = "disponible" } else { banking = "indisponible" };
+						if (status === "OPEN") { status = "ouverte" } else { status = "fermée" };
 
                         $('aside div.content').append(
                             "<h3 class=\"available_bikes\">Station : <span>" + name + "</span></h3> <ul>" +
@@ -77,17 +80,60 @@ var selectedStationID, data, i, marker, velibJson;
                 $('#sign').show();
             });
             $('#sign').click(function() {
+            	$('footer div.wrapper').empty();
                 sessionStorage.setItem("station", json[selectedStationID].name);
                 sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
-                $('footer div.wrapper').append("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
+
+                clearTimeout(timeOutVariable);
+                countDown();
+                displayBookingInfo();
             });
         })
 
 
 
     }
+function displayBookingInfo() {
+    $('footer div.wrapper').append("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
+}
 
 
+var bookingLimit = 20 * 60;    
+var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
+var timeOutVariable;
+// IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
+if ( bookingPastTime < bookingLimit ) {
+    bookingLimit = bookingLimit - Math.round(bookingPastTime);
+    timeOutVariable = setTimeout(countDown, 1000);
+    displayBookingInfo();
 
+} else {
+ alert("coucou");
+}
+
+function countDown() {
+    bookingLimit--;
+    if (bookingLimit > 0) {
+        timeOutVariable = setTimeout(countDown, 1000);
+    }
+    var minutes = Math.floor(bookingLimit / 60);
+    var seconds = bookingLimit - minutes * 60;
+
+    minutesSpan = $('#minutes');
+    secondsSpan = $('#seconds');
+    minutesSpan.html(minutes);
+    secondsSpan.html(seconds);  
+    
+}
+
+$('#console').click(function(){
+    // console.log(sessionStorage.getItem("station"));
+    // console.log(sessionStorage.getItem("bookingDate"));
+    console.log("bookingPastTime " + bookingPastTime);
+    console.log("bookingLimit " + bookingLimit);
+})
+$('#clear').click(function(){
+	sessionStorage.clear();
+})
 
 })();
