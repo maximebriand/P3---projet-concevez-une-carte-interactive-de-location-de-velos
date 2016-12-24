@@ -146,7 +146,7 @@ h3 {
 }
 
 aside li {margin-bottom: 10px;}
-
+aside button#booking {display: none;}
 aside button, #sign {
 	background: #04404a;
 	color: #fff;

@@ -1,318 +1,74 @@
-//SLIDER
-var slideIndex, clickedArrow;
-slideIndex = 1;
-clickedArrow = $('.arrow');
+var selectedStationID, data, i, marker, velibJson;
+(function() {
 
-displaySlide(slideIndex);
+    window.onload = function() {
 
-clickedArrow.click(function(){
-    if ($(this).hasClass( "next" )) {
-        changeSlide(1);
-    } if ($(this).hasClass( "previous" )) {
-        changeSlide(-1);
-    }
-});
-
-$(document).keydown(function(e){
-   switch (e.which){
-     case 37: // fleche gauche
-       changeSlide(-1);
-       break;
-     case 39: // fleche droite
-       changeSlide(1);
-       break;
-   }
-}); 
-
-function changeSlide(n) {
-  displaySlide(slideIndex += n);
-}
-
-function displaySlide(n) {
-    var i;
-    var numberSlides = $(".slide");
-    if (n > numberSlides.length) { slideIndex = 1 }
-    if (n < 1) { slideIndex = numberSlides.length }
-    for (i = 0; i < numberSlides.length; i++) {
-        $(numberSlides[i]).hide(500, "linear");
-    }
-    $(numberSlides[slideIndex - 1]).show(100, "linear");
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//MAP
-var map, velibJSON, marker, infocontent;
-infocontent = $('aside div.content');
-
-function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 48.866667, lng: 2.333333 },
-        zoom: 15
-    });
-    
-
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var infoWindow = new google.maps.InfoWindow({ map: map });
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Vous êtes ici.');
-            map.setCenter(pos);
-        }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+        // Creating a new map
+        var map = new google.maps.Map(document.getElementById("map"), {
+            center: new google.maps.LatLng(48.866667, 2.333333),
+            zoom: 15,
         });
-    } else {
-        // Browser doesn't support Geolocation
-        var infoWindow = new google.maps.InfoWindow({ map: map });
-        handleLocationError(false, infoWindow, map.getCenter());
-    }
 
-    $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function(json) {
-        velibJSON = json;
-        $.each(velibJSON, function() {
-            var image = "css/img/pin_velib_small.png";
 
-            var marker = new google.maps.Marker({
-                position: { lat: this.position.lat, lng: this.position.lng },
-                map: map,
-                icon: image,
-                title: this.address
+
+        $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function(json) {
+
+
+            var markers = [];
+            // Looping through the JSON data
+            for (var i = 0, length = json.length; i < length; i++) {
+                var data = json[i],
+                    latLng = new google.maps.LatLng(json[i].position.lat, json[i].position.lng);
+
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: data.name,
+                    id: i
+                });
+
+
+
+                (function(marker, json) {
+
+                    // Attaching a click event to the current marker
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        // infoWindow.setContent(description);
+                        // infoWindow.open(map, marker);
+                        $('#booking').show();
+                        $('aside div.content').empty();
+                        $('aside div.content').append(
+                            "<h3 class=\"available_bikes\">Station : <span>" + json.name + "</span></h3> <ul>" +
+                            "<li class=\"available_bikes\">La station est <span>" + json.status + "</span></li>" +
+                            "<li class=\"available_bikes\">Adresse : <span>" + json.address + "</span></li>" +
+                            "<li class=\"available_bikes\"><span>" + json.bike_stands + " " + "placesDescription" +
+                            "<li class=\"available_bikes\"><span>" + json.available_bikes + " " + "availableBikesDescription" +
+                            "<li class=\"available_bikes\"><span>" + json.available_bike_stands + " " + "availableBikeStandsDescription" +
+                            "<li class=\"available_bikes\">Le paiement à cette station est <span>" + json.banking + "</span></li></ul>"
+                        );
+                        selectedStationID = this.id;
+                    });
+
+                })(marker, data);
+            };
+            $('#booking').click(function(){
+
+                $('#canvas').show();
+                $('#sign').show();
             });
-
-              marker.addListener('click', function() {
-                canvas.style.display = "none";
-                signBouton[0].style.display = "none";
-              });
-
-            var address, places, availableBikes, availableBikeStands, banking, bonus, name;
-            address = this.address;
-            places = this.bike_stands;
-            availableBikes = this.available_bikes;
-            availableBikeStands = this.available_bike_stands;
-            banking = this.banking;
-            bonus = this.bonus;
-            name = this.name;
-            status = this.status;
-
-            if (banking === true) { banking = "disponible" } else { banking = "indisponible" };
-
-            if (status === "OPEN") { status = "ouverte" } else { status = "fermée" };
-
-            
-            marker.addListener('click', function() {
-                infocontent.empty();
-                var placesDescription, availableBikesDescription, availableBikeStandsDescription;
-                if ( places <= 1 ){ placesDescription = "</span> place à cette station</li>" }
-                    else { placesDescription = "</span> places à cette station</li>" };
-
-                if (availableBikes <= 1 ) {availableBikesDescription = "</span> vélo de disponible</li>" }
-                    else {availableBikesDescription = "</span> vélos sont disponibles</li>"};
-
-                if ( availableBikeStands <= 1 ) { availableBikeStandsDescription = "</span> emplacement de libre</li>" }
-                    else { availableBikeStandsDescription = "</span> emplacements sont libres</li>" }
-
-                infocontent.append(
-                    "<h3 class=\"available_bikes\">Station : <span>" + name + "</span></h3> <ul>" +
-                    "<li class=\"available_bikes\">La station est <span>" + status + "</span></li>" +
-                    "<li class=\"available_bikes\">Adresse : <span>" + address + "</span></li>" +
-                    "<li class=\"available_bikes\"><span>" + places + " " + placesDescription +
-                    "<li class=\"available_bikes\"><span>" + availableBikes + " " + availableBikesDescription +
-                    "<li class=\"available_bikes\"><span>" + availableBikeStands + " " + availableBikeStandsDescription +
-                    "<li class=\"available_bikes\">Le paiement à cette station est <span>" + banking + "</span></li></ul>" +
-                    "<button class=\"booking\">Réserver un vélo</button>"
-                );
-
-                //BOOKING FUNCTION
-                bookVelib(name);
-
+            $('#sign').click(function() {
+                sessionStorage.setItem("station", json[selectedStationID].name);
+                sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
+                $('footer div.wrapper').append("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
             });
-            // To add the marker to the map, call setMap();
-            marker.setMap(map);
-
         })
-    });
-
-} 
 
 
 
-
-
-
-
-
-
-var bookingLimit = 20 * 60;
-var footer = $('footer div.wrapper');
-
-//BOOK A VELIB FUNCTION
-function bookVelib(station) {
-    var bookingButton, canvas;
-    bookingButton = $('.booking'),
-    canvas = $('#canvas');
-
-    bookingButton.click(function() {
-        canvas.show();
-        signBouton.show();
-    });
-
-    signBouton.click(function() {
-    clearCanvas();
-    if (sessionStorage.getItem("station") === station) {
-            alert("vous avez déjà réservé un Velib à cette station !");
-        } else {
-            sessionStorage.setItem("station", station);
-            sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
-            footer.html();
-            setTimeout(countDown, 1000);
-            displayBookingInfo();
-        }
-    });
-};
-
-
-function displayBookingInfo() {
-    footer.append("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
-}
-
-var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
-// IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
-if ( bookingPastTime < bookingLimit ) {
-    bookingLimit = bookingLimit - Math.round(bookingPastTime);
-    setTimeout(countDown, 1000);
-    displayBookingInfo();
-
-} else {
- alert("coucou");
-}
-
-
-
-        
-
-function countDown() {
-    bookingLimit--;
-    if (bookingLimit > 0) {
-        setTimeout(countDown, 1000);
     }
-    var minutes = Math.floor(bookingLimit / 60);
-    var seconds = bookingLimit - minutes * 60;
-
-    minutesSpan = $('#minutes');
-    secondsSpan = $('#seconds');
-    minutesSpan.html(minutes);
-    secondsSpan.html(seconds);  
-    
-}
 
 
 
 
-
-
-
-
-
-//debug function :)
-
-$('#console').click(function(){
-    // console.log(sessionStorage.getItem("station"));
-    // console.log(sessionStorage.getItem("bookingDate"));
-    console.log("bookingPastTime " + bookingPastTime);
-    console.log("bookingLimit " + bookingLimit);
-})
-
-
-
-
-
-
-//CANVAS
-//http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-simple
-var canvas, context, signBouton;
-canvas = $('#canvas')[0];
-signBouton = $('#sign');
-context = canvas.getContext('2d');
-
-$('#canvas').mousedown(function(e) {
-    var mouseX = e.pageX - this.offsetLeft;
-    var mouseY = e.pageY - this.offsetTop;
-
-    paint = true;
-    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
-    redraw();
-});
-$('#canvas').mousemove(function(e) {
-    if (paint) {
-        addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
-        redraw();
-    }
-});
-$('#canvas').mouseup(function(e) {
-    paint = false;
-});
-$('#canvas').mouseleave(function(e) {
-    paint = false;
-});
-var clickX = new Array();
-var clickY = new Array();
-var clickDrag = new Array();
-var paint;
-
-function addClick(x, y, dragging) {
-    clickX.push(x);
-    clickY.push(y);
-    clickDrag.push(dragging);
-}
-
-function redraw() {
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
-
-    context.strokeStyle = "#333";
-    context.lineJoin = "round";
-    context.lineWidth = 5;
-
-    for (var i = 0; i < clickX.length; i++) {
-        context.beginPath();
-        if (clickDrag[i] && i) {
-            context.moveTo(clickX[i - 1], clickY[i - 1]);
-        } else {
-            context.moveTo(clickX[i] - 1, clickY[i]);
-        }
-        context.lineTo(clickX[i], clickY[i]);
-        context.closePath();
-        context.stroke();
-    }
-}
-
-function clearCanvas() {
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-}
-
-
-
-
-
-
-
-
-
+})();
