@@ -85,7 +85,9 @@ var selectedStationID, data, i, marker, velibJson;
                 sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
 
                 clearTimeout(timeOutVariable);
-                countDown();
+                bookingLimit = 20 * 60;    
+                setTimeout(countDown, 1000);
+
                 displayBookingInfo();
             });
         })

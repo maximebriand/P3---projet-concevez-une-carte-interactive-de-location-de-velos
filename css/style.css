@@ -115,45 +115,49 @@ section.explain ul.slider_nav li.slider_nav.active {background: #e0dcdc;}
 
 section.map {
 	background: #97bf1b;
+	min-height: 540px;
 	height: 90vh;
 }
 section.map .wrapper,
-div#map {height: 90%;}
+section.map .map_with_infos,
+div#map {height: 440px;}
 
-div#map {
-	width: 60%;
-	float: left;
+div#map {width: 60%;}
+
+section.map .map_with_infos {
+	display: flex;
+	justify-content: space-between;
 }
 section.map .wrapper {padding-top:25px;}
 
 aside {
-	float: right;
 	width: 30%;
-	height: calc(90% - 50px);
-		height: -moz-calc(90% - 50px);
-		height: -o-calc(90% - 50px);
-		height: -webkit-calc(90% - 50px);
-		height: -ms-calc(90% - 50px);
+	min-height: calc(90% - 50px);
+		min-height: -moz-calc(90% - 50px);
+		min-height: -o-calc(90% - 50px);
+		min-height: -webkit-calc(90% - 50px);
+		min-height: -ms-calc(90% - 50px);
 	background: #00abc6;
 	color: #fff;
 	padding: 25px; 
 }
 
 h3 {
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 700;
 	margin-bottom: 25px;
+	text-decoration: underline;
 }
 
-aside li {margin-bottom: 10px;}
+aside li {margin-bottom: 4px;}
 aside button#booking {display: none;}
 aside button, #sign {
 	background: #04404a;
 	color: #fff;
 	border: none;
-	padding: 15px;
+	padding: 10px;
 	font-size: 16px;
-	margin: 25px 0;
+	margin: 10px 0;
 	cursor: pointer;
 }
 #sign {display: none;}
