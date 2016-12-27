@@ -1,4 +1,4 @@
-var selectedStationID, data, i, marker, velibJson;
+var selectedStationID;
 (function() {
 
     window.onload = function() {
@@ -9,6 +9,25 @@ var selectedStationID, data, i, marker, velibJson;
             zoom: 15,
         });
 
+
+        // Try HTML5 geolocation.
+       if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(function(position) {
+               var pos = {
+                   lat: position.coords.latitude,
+                   lng: position.coords.longitude
+               };
+               var infoWindow = new google.maps.InfoWindow({map: map});
+               infoWindow.setPosition(pos);
+               infoWindow.setContent('Vous êtes ici.');
+               map.setCenter(pos);
+           }, function() {
+               handleLocationError(true, infoWindow, map.getCenter());
+           });
+       } else {
+           // Browser doesn't support Geolocation
+           handleLocationError(false, infoWindow, map.getCenter());
+       }
 
 
         $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function(json) {
@@ -29,13 +48,10 @@ var selectedStationID, data, i, marker, velibJson;
                     id: i
                 });
 
-
-
                 (function(marker, json) {
 
                     // Attaching a click event to the current marker
  					google.maps.event.addListener(marker, "click", function(e) {
-						$('aside div.content').html();
 						$('#sign').hide();
 						$('#canvas').hide();
 						var address, places, availableBikes, availableBikeStands, banking, bonus, name;
@@ -89,6 +105,12 @@ var selectedStationID, data, i, marker, velibJson;
                 setTimeout(countDown, 1000);
 
                 displayBookingInfo();
+                clearCanvas();
+             	$('#canvas').hide();
+                $('#sign').hide();
+				$('aside div.content').empty();
+				$('#booking').hide();
+
             });
         })
 
@@ -108,9 +130,6 @@ if ( bookingPastTime < bookingLimit ) {
     bookingLimit = bookingLimit - Math.round(bookingPastTime);
     timeOutVariable = setTimeout(countDown, 1000);
     displayBookingInfo();
-
-} else {
- alert("coucou");
 }
 
 function countDown() {
@@ -127,15 +146,4 @@ function countDown() {
     secondsSpan.html(seconds);  
     
 }
-
-$('#console').click(function(){
-    // console.log(sessionStorage.getItem("station"));
-    // console.log(sessionStorage.getItem("bookingDate"));
-    console.log("bookingPastTime " + bookingPastTime);
-    console.log("bookingLimit " + bookingLimit);
-})
-$('#clear').click(function(){
-	sessionStorage.clear();
-})
-
 })();

@@ -60,11 +60,16 @@ function redraw() {
 }
 
 function clearCanvas() {
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+    clickX = [];
+    clickY = [];
+    clickDrag = [];
 }
 
 
-
+$('#clearcanvas').click(function(){
+    clearCanvas();
+})
 
 
 
