@@ -130,6 +130,8 @@ if ( bookingPastTime < bookingLimit ) {
     bookingLimit = bookingLimit - Math.round(bookingPastTime);
     timeOutVariable = setTimeout(countDown, 1000);
     displayBookingInfo();
+} else {
+	$('footer div.wrapper').html("<p>Vous n'avez pas de réservation en cours</p>")
 }
 
 function countDown() {
