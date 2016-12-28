@@ -1,4 +1,10 @@
-var selectedStationID;
+
+var bookingButton, signButton, canvasArea, asideElement, footer, selectedStationID;
+	bookingButton = $('#booking');
+	signButton = $('#sign');
+	canvasArea = $('#canvas');
+	asideElement = $('aside div.content');
+	footer = $('footer div.wrapper');
 (function() {
 
     window.onload = function() {
@@ -52,23 +58,23 @@ var selectedStationID;
 
                     // Attaching a click event to the current marker
  					google.maps.event.addListener(marker, "click", function(e) {
-						$('#sign').hide();
-						$('#canvas').hide();
+						signButton.hide();
+						canvasArea.hide();
+						
 						var address, places, availableBikes, availableBikeStands, banking, bonus, name;
-						address = json.address;
-						places = json.bike_stands;
-						availableBikes = json.available_bikes;
-						availableBikeStands = json.available_bike_stands;
-						banking = json.banking;
-						bonus = json.bonus;
-						name = json.name;
-						status = json.status;
+							address = json.address;
+							places = json.bike_stands;
+							availableBikes = json.available_bikes;
+							availableBikeStands = json.available_bike_stands;
+							banking = json.banking;
+							bonus = json.bonus;
+							name = json.name;
+							status = json.status;
 
-                        $('#booking').show();
-                        $('aside div.content').empty();
+                        bookingButton.show();
+                        asideElement.empty();
                         selectedStationID = this.id;
 
-                        $('aside div.content').empty();
                         var placesDescription, availableBikesDescription, availableBikeStandsDescription;
                         
                         if (places <= 1) { placesDescription = "</span> place à cette station</li>" } else { placesDescription = "</span> places à cette station</li>" };
@@ -77,7 +83,7 @@ var selectedStationID;
 						if (banking === true) { banking = "disponible" } else { banking = "indisponible" };
 						if (status === "OPEN") { status = "ouverte" } else { status = "fermée" };
 
-                        $('aside div.content').append(
+                        asideElement.append(
                             "<h3 class=\"available_bikes\">Station : <span>" + name + "</span></h3> <ul>" +
                             "<li class=\"available_bikes\">La station est <span>" + status + "</span></li>" +
                             "<li class=\"available_bikes\">Adresse : <span>" + address + "</span></li>" +
@@ -90,15 +96,14 @@ var selectedStationID;
 
                 })(marker, data);
             };
-            $('#booking').click(function() {
+            bookingButton.click(function() {
 
-                $('#canvas').show();
-                $('#sign').show();
+                canvasArea.show();
+                signButton.show();
             });
-            $('#sign').click(function() {
-            	$('footer div.wrapper').empty();
-                sessionStorage.setItem("station", json[selectedStationID].name);
-                sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
+            signButton.click(function() {
+                localStorage.setItem("station", json[selectedStationID].name);
+                localStorage.setItem("bookingDate", Math.floor($.now() / 1000));
 
                 clearTimeout(timeOutVariable);
                 bookingLimit = 20 * 60;    
@@ -106,10 +111,10 @@ var selectedStationID;
 
                 displayBookingInfo();
                 clearCanvas();
-             	$('#canvas').hide();
-                $('#sign').hide();
-				$('aside div.content').empty();
-				$('#booking').hide();
+             	canvasArea.hide();
+                signButton.hide();
+				asideElement.empty();
+				bookingButton.hide();
 
             });
         })
@@ -118,20 +123,20 @@ var selectedStationID;
 
     }
 function displayBookingInfo() {
-    $('footer div.wrapper').append("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
+    footer.html("<p>1 vélo réservé à la station " + localStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
 }
 
 
 var bookingLimit = 20 * 60;    
-var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
+var bookingPastTime = (Math.floor($.now()) / 1000 ) - (localStorage.getItem("bookingDate"));
 var timeOutVariable;
 // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
-if ( bookingPastTime < bookingLimit ) {
+if ( bookingPastTime < bookingLimit && localStorage.getItem("station")) {
     bookingLimit = bookingLimit - Math.round(bookingPastTime);
     timeOutVariable = setTimeout(countDown, 1000);
     displayBookingInfo();
 } else {
-	$('footer div.wrapper').html("<p>Vous n'avez pas de réservation en cours</p>")
+	footer.html("<p>Vous n'avez pas de réservation en cours</p>")
 }
 
 function countDown() {

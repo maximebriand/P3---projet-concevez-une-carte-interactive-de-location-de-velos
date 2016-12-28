@@ -117,6 +117,7 @@ section.map {
 	background: #97bf1b;
 	min-height: 540px;
 	height: 90vh;
+	padding-bottom: 60px;
 }
 section.map .wrapper,
 section.map .map_with_infos,
