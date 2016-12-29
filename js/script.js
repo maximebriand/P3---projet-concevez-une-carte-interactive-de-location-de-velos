@@ -127,7 +127,7 @@ function displayBookingInfo() {
 }
 
 
-var bookingLimit = 20 * 60;    
+var bookingLimit = 11 * 60;    
 var bookingPastTime = (Math.floor($.now()) / 1000 ) - (localStorage.getItem("bookingDate"));
 var timeOutVariable;
 // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
@@ -143,6 +143,8 @@ function countDown() {
     bookingLimit--;
     if (bookingLimit > 0) {
         timeOutVariable = setTimeout(countDown, 1000);
+    } else {
+    	footer.html("<p>Votre réservation a expirée</p>")
     }
     var minutes = Math.floor(bookingLimit / 60);
     var seconds = bookingLimit - minutes * 60;
