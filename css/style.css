@@ -161,6 +161,10 @@ aside button, #sign {
 	margin: 10px 0;
 	cursor: pointer;
 }
+aside .alert {
+	background: #e04545;
+	padding: 5px 0;
+}
 #sign {display: none;}
 canvas#canvas {
 	display: none;

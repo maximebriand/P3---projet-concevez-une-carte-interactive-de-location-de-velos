@@ -15,7 +15,6 @@ var bookingButton, signButton, canvasArea, asideElement, footer, selectedStation
             zoom: 15,
         });
 
-
         // Try HTML5 geolocation.
        if (navigator.geolocation) {
            navigator.geolocation.getCurrentPosition(function(position) {
@@ -34,7 +33,6 @@ var bookingButton, signButton, canvasArea, asideElement, footer, selectedStation
            // Browser doesn't support Geolocation
            handleLocationError(false, infoWindow, map.getCenter());
        }
-
 
         $.getJSON("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49", function(json) {
 
@@ -93,45 +91,42 @@ var bookingButton, signButton, canvasArea, asideElement, footer, selectedStation
                             "<li class=\"available_bikes\">Le paiement à cette station est <span>" + banking + "</span></li></ul>"
                         );
                     });
-
                 })(marker, data);
             };
             bookingButton.click(function() {
-
                 canvasArea.show();
                 signButton.show();
             });
             signButton.click(function() {
-                localStorage.setItem("station", json[selectedStationID].name);
-                localStorage.setItem("bookingDate", Math.floor($.now() / 1000));
+				if (sessionStorage.getItem("station") === json[selectedStationID].name) {
+					asideElement.append("<p class=\"alert\">vous avez déjà réservé un Velib à cette station !</p>");
+				} else {
+	                sessionStorage.setItem("station", json[selectedStationID].name);
+	                sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
 
-                clearTimeout(timeOutVariable);
-                bookingLimit = 20 * 60;    
-                setTimeout(countDown, 1000);
+	                clearTimeout(timeOutVariable);
+	                bookingLimit = 20 * 60;    
+	                setTimeout(countDown, 1000);
 
-                displayBookingInfo();
-                clearCanvas();
-             	canvasArea.hide();
-                signButton.hide();
-				asideElement.empty();
-				bookingButton.hide();
-
+	                displayBookingInfo();
+	                clearCanvas();
+	             	canvasArea.hide();
+	                signButton.hide();
+					asideElement.empty();
+					bookingButton.hide();
+				}
             });
         })
-
-
-
     }
 function displayBookingInfo() {
-    footer.html("<p>1 vélo réservé à la station " + localStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
+    footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
 }
 
-
 var bookingLimit = 11 * 60;    
-var bookingPastTime = (Math.floor($.now()) / 1000 ) - (localStorage.getItem("bookingDate"));
+var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
 var timeOutVariable;
 // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
-if ( bookingPastTime < bookingLimit && localStorage.getItem("station")) {
+if ( bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
     bookingLimit = bookingLimit - Math.round(bookingPastTime);
     timeOutVariable = setTimeout(countDown, 1000);
     displayBookingInfo();
@@ -153,6 +148,5 @@ function countDown() {
     secondsSpan = $('#seconds');
     minutesSpan.html(minutes);
     secondsSpan.html(seconds);  
-    
 }
 })();

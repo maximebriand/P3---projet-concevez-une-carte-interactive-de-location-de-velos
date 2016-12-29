@@ -13,8 +13,8 @@ clickedArrow.click(function(){
     }
 });
 
-$(document).keydown(function(e){
-   switch (e.which){
+$(document).keydown(function(keyboard){
+   switch (keyboard.which){
      case 37: // fleche gauche
        changeSlide(-1);
        break;
