@@ -5,6 +5,7 @@ var bookingButton, signButton, canvasArea, asideElement, footer, selectedStation
 	canvasArea = $('#canvas');
 	asideElement = $('aside div.content');
 	footer = $('footer div.wrapper');
+
 (function() {
 
     window.onload = function() {
@@ -100,53 +101,54 @@ var bookingButton, signButton, canvasArea, asideElement, footer, selectedStation
             signButton.click(function() {
 				if (sessionStorage.getItem("station") === json[selectedStationID].name) {
 					asideElement.append("<p class=\"alert\">vous avez déjà réservé un Velib à cette station !</p>");
+                    clearCanvas();
 				} else {
-	                sessionStorage.setItem("station", json[selectedStationID].name);
-	                sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
+                      sessionStorage.setItem("station", json[selectedStationID].name);
+                      sessionStorage.setItem("bookingDate", Math.floor($.now() / 1000));
 
-	                clearTimeout(timeOutVariable);
-	                bookingLimit = 20 * 60;    
-	                setTimeout(countDown, 1000);
+                      clearTimeout(timeOutVariable);
+                      bookingLimit = 20 * 60;    
+                      setTimeout(countDown, 1000);
 
-	                displayBookingInfo();
-	                clearCanvas();
-	             	canvasArea.hide();
-	                signButton.hide();
+                      displayBookingInfo();
+                      clearCanvas();
+                      canvasArea.hide();
+              signButton.hide();
 					asideElement.empty();
 					bookingButton.hide();
 				}
             });
         })
     }
-function displayBookingInfo() {
-    footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
-}
-
-var bookingLimit = 11 * 60;    
-var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
-var timeOutVariable;
-// IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
-if ( bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
-    bookingLimit = bookingLimit - Math.round(bookingPastTime);
-    timeOutVariable = setTimeout(countDown, 1000);
-    displayBookingInfo();
-} else {
-	footer.html("<p>Vous n'avez pas de réservation en cours</p>")
-}
-
-function countDown() {
-    bookingLimit--;
-    if (bookingLimit > 0) {
-        timeOutVariable = setTimeout(countDown, 1000);
-    } else {
-    	footer.html("<p>Votre réservation a expirée</p>")
+    function displayBookingInfo() {
+        footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
     }
-    var minutes = Math.floor(bookingLimit / 60);
-    var seconds = bookingLimit - minutes * 60;
 
-    minutesSpan = $('#minutes');
-    secondsSpan = $('#seconds');
-    minutesSpan.html(minutes);
-    secondsSpan.html(seconds);  
-}
+    var bookingLimit = 20 * 60;    
+    var bookingPastTime = (Math.floor($.now()) / 1000 ) - (sessionStorage.getItem("bookingDate"));
+    var timeOutVariable;
+    // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
+    if ( bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
+        bookingLimit = bookingLimit - Math.round(bookingPastTime);
+        timeOutVariable = setTimeout(countDown, 1000);
+        displayBookingInfo();
+    } else {
+    	footer.html("<p>Vous n'avez pas de réservation en cours</p>")
+    }
+
+    function countDown() {
+        bookingLimit--;
+        if (bookingLimit > 0) {
+            timeOutVariable = setTimeout(countDown, 1000);
+        } else {
+        	footer.html("<p>Votre réservation a expirée</p>")
+        }
+        var minutes = Math.floor(bookingLimit / 60);
+        var seconds = bookingLimit - minutes * 60;
+
+        minutesSpan = $('#minutes');
+        secondsSpan = $('#seconds');
+        minutesSpan.html(minutes);
+        secondsSpan.html(seconds);  
+    }
 })();
