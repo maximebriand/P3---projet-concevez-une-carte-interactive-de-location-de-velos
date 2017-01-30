@@ -13,13 +13,13 @@
 			<div class="logo"></div>
 			<nav>
 				<ul>
-					<li><a href="#">Explication</a></li>
-					<li><a href="#">Carte | Réservation</a></li>
+					<li><a href="#section_explain">Explication</a></li>
+					<li><a href="#section_map">Carte | Réservation</a></li>
 				</ul>
 			</nav>
 		</div>
 	</header>
-	<section class="explain">
+	<section class="explain" id="section_explain">
 		<div class="wrapper">
 			<h1>Réservez votre Vélib' facilement et rapidement ici !</h1>
 			<div class="slider">
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 	</section>
-	<section class="map">
+	<section class="map" id="section_map">
 		<div class="wrapper">
 			<h2>Trouvez votre Vélib à proximité !</h2>
 			<div class="map_with_infos">
@@ -74,7 +74,7 @@
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASmGFQwqU9iDLdHePkcv1ixK4ECy80afc">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASmGFQwqU9iDLdHePkcv1ixK4ECy80afc&callback=initMap">
     </script>
 	<script src="js/canvas.js"></script>
 	<script src="js/slider.js"></script>
