@@ -19,19 +19,35 @@ var googleMap = {
     },
 
     createMarker: function(stationsInfo) {
-        console.log(stationsInfo.position.lat);
-        NewMarker = new google.maps.LatLng(stationsInfo.position.lat, stationsInfo.position.lng);
-        googleMap.displayMarker(NewMarker);
-        google.maps.event.addListener(marker, 'click', function() {
-            console.log(stationsInfo.name)
-        });
+        NewMarker = new google.maps.LatLng(stationsInfo.position.lat, stationsInfo.position.lng);     
+        googleMap.displayMarker(NewMarker, stationsInfo.status, stationsInfo.bike_stands);
+        googleMap.onMarkerClick(stationsInfo);
+        
+    
+
     },
 
-    displayMarker: function(location) {
+    displayMarker: function(location, status, available) {
+        var image;
+        if (status === "OPEN" && available > 1) {
+            image = "css/img/pin_velib_open.png";
+        } else {
+            image = "css/img/pin_velib_closed.png";
+        }
+        
+
         marker = new google.maps.Marker({
             position: location,
             map: this.map,
+            icon: image,
         })
+    },
+
+    onMarkerClick: function(clickedMarker) {
+        //on marker click
+        google.maps.event.addListener(marker, 'click', function() {
+            console.log(clickedMarker.name);
+        });  
     }
 
 }
