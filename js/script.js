@@ -75,18 +75,38 @@ var googleMap = {
                 "<li class=\"available_bikes\"><span>" + availableBikeStands + " " + availableBikeStandsDescription +
                 "<li class=\"available_bikes\">Le paiement à cette station est <span>" + banking + "</span></li></ul>"
             );
-            if (status === "ouverte" && availableBikes >= 1) {bookingButton.show();}
+            if (status === "ouverte" && availableBikes >= 1) { bookingButton.show(); }
 
-            console.log(clickedMarker.name);
+            var superBooking = Object.create(newBooking); //create a booking object
+            superBooking.initBooking(clickedMarker.name, clickedMarker.position.lat, clickedMarker.position.lng);
+            console.log(superBooking)
         });
     }
 
 
+};
+
+
+var newBooking = {
+    station: null,
+    stationLat: null,
+    stationLng: null,
+    startingHour: null,
+    markerImg: "css/img/pin_velib_booked.png",
+
+    initBooking: function(markerStation, markerLat, markerLng) {
+        this.station = markerStation;
+        this.stationLat = markerLat;
+        this.stationLng = markerLng;
+        this.startingHour = $.now();
+    },
 }
 
+
  
-$(function(){
+$( document ).ready(function(){
     var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
     googleMap.init(document.getElementById("map"), 48.866667, 2.333333, 15);
     googleMap.addMarker(apiUrl);
+
 })
