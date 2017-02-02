@@ -6,3 +6,6 @@
 - responsive
 - bloquer la station si fermée
 - image dans le slider
+
+- object = session de location 
+new booking = new BookingObject
