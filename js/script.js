@@ -77,9 +77,9 @@ var googleMap = {
             );
             if (status === "ouverte" && availableBikes >= 1) { bookingButton.show(); }
 
-            var superBooking = Object.create(newBooking); //create a booking object
-            superBooking.initBooking(clickedMarker.name, clickedMarker.position.lat, clickedMarker.position.lng);
-            console.log(superBooking)
+            sessionStorage.setItem("stationSelectedMarker", clickedMarker.name);
+            sessionStorage.setItem("latSelectedMarker", clickedMarker.position.lat);
+            sessionStorage.setItem("lngSelectedMarker", clickedMarker.position.lng);
         });
     }
 
@@ -87,26 +87,83 @@ var googleMap = {
 };
 
 
+
+
 var newBooking = {
     station: null,
     stationLat: null,
     stationLng: null,
-    startingHour: null,
+    bookingDate: Math.floor($.now() / 1000),
     markerImg: "css/img/pin_velib_booked.png",
 
     initBooking: function(markerStation, markerLat, markerLng) {
         this.station = markerStation;
         this.stationLat = markerLat;
         this.stationLng = markerLng;
-        this.startingHour = $.now();
     },
+    createBooking: function(){
+        sessionStorage.setItem("station", this.station);
+        sessionStorage.setItem("bookingDate", this.bookingDate);
+        displayBookingInfo();
+        this.startCountdow();
+    }, 
+    startCountdow: function() {
+        clearTimeout(timeOutVariable);
+        bookingLimit = 20 * 60;
+        setTimeout(countDown, 1000);
+    }
+
+}
+
+var bookingLimit = 20 * 60;
+var footer = $('footer div.wrapper');
+
+function displayBookingInfo() {
+    footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
+};
+
+
+function checkBooking() {
+    var bookingPastTime = (Math.floor($.now()) / 1000) - (sessionStorage.getItem("bookingDate"));
+    var timeOutVariable;
+    // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
+    if (bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
+        bookingLimit = bookingLimit - Math.round(bookingPastTime);
+        timeOutVariable = setTimeout(countDown, 1000);
+        displayBookingInfo();
+    } else {
+        footer.html("<p>Vous n'avez pas de réservation en cours</p>")
+    }
 }
 
 
+function countDown() {
+    bookingLimit--;
+    if (bookingLimit > 0) {
+        timeOutVariable = setTimeout(countDown, 1000);
+    } else {
+        footer.html("<p>Votre réservation a expirée</p>")
+    }
+    var minutes = Math.floor(bookingLimit / 60);
+    var seconds = bookingLimit - minutes * 60;
+
+    minutesSpan = $('#minutes');
+    secondsSpan = $('#seconds');
+    minutesSpan.html(minutes);
+    secondsSpan.html(seconds);  
+};
  
 $( document ).ready(function(){
     var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
     googleMap.init(document.getElementById("map"), 48.866667, 2.333333, 15);
     googleMap.addMarker(apiUrl);
+    checkBooking(); //used to check if there is a booking
+
+    var bookingButton = $('#booking');
+    bookingButton.click(function() {
+        var superBooking = Object.create(newBooking); //create a booking object
+        superBooking.initBooking(sessionStorage.getItem("stationSelectedMarker"), sessionStorage.getItem("latSelectedMarker"), sessionStorage.getItem("lngSelectedMarker"));
+        superBooking.createBooking();
+    })
 
 })
