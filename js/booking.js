@@ -1,17 +1,20 @@
 var googleMap = {
-    apiUrl: null,
     map: null,
 
-
-
-    init: function(mapElt, centerLat, centerLng, zoom ) {
+    init: function(mapElt, centerLat, centerLng, zoom, url ) {
         this.map = new google.maps.Map(mapElt, {
-            center: new google.maps.LatLng(centerLat, centerLng),
-            zoom: zoom,
+            center: {
+                lat: centerLat, 
+                lng: centerLng
+            },
+            zoom: zoom
             
         });
-        return map
+        checkBooking(); //used to check if there is a booking
+        bookingButtonClick(); //create a new booking each time the booking button is hitten
     },
+
+
     addMarker: function(url) {
         $.getJSON(url, function(json) {
             $.each(json, function(index, value){
@@ -82,8 +85,6 @@ var googleMap = {
             sessionStorage.setItem("lngSelectedMarker", clickedMarker.position.lng);
         });
     }
-
-
 };
 
 
@@ -112,20 +113,21 @@ var newBooking = {
         bookingLimit = 20 * 60;
         setTimeout(countDown, 1000);
     }
-
 }
 
-var bookingLimit = 20 * 60;
+var bookingLimit = 20 * 60; // 20 minutes * 60 seconds
 var footer = $('footer div.wrapper');
 
 function displayBookingInfo() {
     footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
 };
 
+var timeOutVariable;
 
+//Function to excecute when the map is initialize to check if there is already a booking in webstorage.
 function checkBooking() {
     var bookingPastTime = (Math.floor($.now()) / 1000) - (sessionStorage.getItem("bookingDate"));
-    var timeOutVariable;
+   
     // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
     if (bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
         bookingLimit = bookingLimit - Math.round(bookingPastTime);
@@ -136,13 +138,24 @@ function checkBooking() {
     }
 }
 
+function bookingButtonClick(){
+    var bookingButton = $('#booking');
+    bookingButton.click(function() {
+        var superBooking = Object.create(newBooking); //create a booking object
+        superBooking.initBooking(
+            sessionStorage.getItem("stationSelectedMarker"), 
+            sessionStorage.getItem("latSelectedMarker"), 
+            sessionStorage.getItem("lngSelectedMarker"));
+        superBooking.createBooking();
+    })
+};
 
 function countDown() {
     bookingLimit--;
     if (bookingLimit > 0) {
         timeOutVariable = setTimeout(countDown, 1000);
     } else {
-        footer.html("<p>Votre réservation a expirée</p>")
+        footer.html("<p>Votre réservation a expiré</p>")
     }
     var minutes = Math.floor(bookingLimit / 60);
     var seconds = bookingLimit - minutes * 60;
@@ -152,18 +165,14 @@ function countDown() {
     minutesSpan.html(minutes);
     secondsSpan.html(seconds);  
 };
- 
-$( document ).ready(function(){
-    var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
+
+//Google Map callback to initialize the map
+function initMap() {
     googleMap.init(document.getElementById("map"), 48.866667, 2.333333, 15);
+    var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
     googleMap.addMarker(apiUrl);
-    checkBooking(); //used to check if there is a booking
+};
 
-    var bookingButton = $('#booking');
-    bookingButton.click(function() {
-        var superBooking = Object.create(newBooking); //create a booking object
-        superBooking.initBooking(sessionStorage.getItem("stationSelectedMarker"), sessionStorage.getItem("latSelectedMarker"), sessionStorage.getItem("lngSelectedMarker"));
-        superBooking.createBooking();
-    })
 
-})
+
+

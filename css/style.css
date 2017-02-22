@@ -55,7 +55,14 @@ section.explain	{
 	overflow: hidden;
 }
 section.explain .wrapper {height: 100%;}
-section.explain div.slider {position: relative; height: 100%;}
+section.explain div.slider {
+	position: relative;
+	height: calc(100% - 120px); /*padding = 2*70 + heading height = 75*/
+		height: -moz-calc(100% - 120px);
+		height: -o-calc(100% - 120px);
+		height: -webkit-calc(100% - 120px);
+		height: -ms-calc(100% - 120px);
+}
 section.explain .arrow {
 	position: absolute;
 	width: 60px;
@@ -63,11 +70,11 @@ section.explain .arrow {
 	color: #fff;
 	text-decoration: none;
 	cursor: pointer;
-	top: calc(50% - 75px); /*item height/2 + (padding from the section and the li - header height)*/
-		top: -moz-calc(50% - 75px);
-		top: -o-calc(50% - 75px);
-		top: -webkit-calc(50% - 75px);
-		top: -ms-calc(50% - 75px);
+	top: calc(50% - 20px); /*item height/2 */
+		top: -moz-calc(50% - 20px);
+		top: -o-calc(50% - 20px);
+		top: -webkit-calc(50% - 20px);
+		top: -ms-calc(50% - 20px);
 	display: block;
 }
 
@@ -81,9 +88,23 @@ section.explain ul.slider {
 	display: flex;
 	width: 400%; /*100% per slide*/
 }
+
+ul.slider {
+	height: calc(100% - 140px); /*padding = 2*70*/
+			height: -moz-calc(100% - 140px);
+			height: -o-calc(100% - 140px);
+			height: -webkit-calc(100% - 140px);
+			height: -ms-calc(100% - 140px);
+		}
 section.explain ul.slider li {
 	position: relative;
-	width: 1100px;
+	max-width: 1100px;
+	width: calc(100% - 140px);
+		width: -moz-calc(100% - 140px);
+		width: -o-calc(100% - 140px);
+		width: -webkit-calc(100% - 140px);
+		width: -ms-calc(100% - 140px);
+	height: 100%;
 	min-height: 300px;
 	padding: 70px;
 	display: none;
@@ -116,7 +137,6 @@ section.explain ul.slider_nav li.slider_nav.active {background: #e0dcdc;}
 section.map {
 	background: #97bf1b;
 	min-height: 540px;
-	height: 90vh;
 	padding-bottom: 60px;
 }
 section.map .wrapper,
@@ -186,6 +206,28 @@ footer {
 	right: 0;
 }
 
-@media screen and (max-width: 1260px) {
+@media screen and (max-width: 768px) {
+	section.map {height: 100vh;}
+	section .map_with_infos {
+		flex-direction: column;
+		justify-content: flex-start;
+		padding: 0 5% 55px;
+		min-height: 90vh;
+	}
+	div#map {
+		width: 100%;
+		height: 60vh;
+	}
+	aside {
+		/*100% - padding left - padding right*/
+		width: calc(100% - 50px); 
+			width: -moz-calc(100% - 50px);
+			width: -o-calc(100% - 50px);
+			width: -webkit-calc(100% - 50px);
+			width: -ms-calc(100% - 50px);
+		display: block;
+		min-height: 240px;
+	}
+	footer {padding: 10px 25px 0}
 }
 
