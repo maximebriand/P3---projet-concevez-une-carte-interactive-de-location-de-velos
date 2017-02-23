@@ -1,5 +1,6 @@
 var googleMap = {
     map: null,
+    localJson: [],
 
     init: function(mapElt, centerLat, centerLng, zoom, url ) {
         this.map = new google.maps.Map(mapElt, {
@@ -15,21 +16,38 @@ var googleMap = {
     },
 
 
-    addMarker: function(url) {
-        $.getJSON(url, function(json) {
-            $.each(json, function(index, value){
-                googleMap.createMarker(json[index]);
-            });
+    addMarker() {
+        var me = this;//used to call the object
+        var table = this.localJson;
+        $.each(table, function(index, value) {
+            googleMap.createMarker(table[index]);
         });
     },
 
-    createMarker: function(stationsInfo) {
-        NewMarker = new google.maps.LatLng(stationsInfo.position.lat, stationsInfo.position.lng);     
-        googleMap.displayMarker(NewMarker, stationsInfo.status, stationsInfo.available_bikes);
-        googleMap.onMarkerClick(stationsInfo);
+
+    getResponse(url) {
+        var tempTable = [];
+        var me = this;//used to call the object
+
+        $.getJSON(url, function(json) {
+            $.each(json, function(index, value) {
+                tempTable.push(json[index]);
+            });
+        }).always(function(){
+            me.addMarker(); 
+        });
+        this.localJson = tempTable;
     },
 
-    displayMarker: function(location, status, available) {
+
+
+    createMarker(stationsInfo) {
+        NewMarker = new google.maps.LatLng(stationsInfo.position.lat, stationsInfo.position.lng);     
+        this.displayMarker(NewMarker, stationsInfo.status, stationsInfo.available_bikes);
+        this.onMarkerClick(stationsInfo);
+    },
+
+    displayMarker(location, status, available) {
         var image;
         if (status === "OPEN" && available >= 1) {
             image = "css/img/pin_velib_open.png";
@@ -44,7 +62,7 @@ var googleMap = {
         })
     },
 
-    onMarkerClick: function(clickedMarker) {
+    onMarkerClick(clickedMarker) {
         //on marker click
         google.maps.event.addListener(marker, 'click', function() {
   
@@ -97,18 +115,18 @@ var newBooking = {
     bookingDate: Math.floor($.now() / 1000),
     markerImg: "css/img/pin_velib_booked.png",
 
-    initBooking: function(markerStation, markerLat, markerLng) {
+    initBooking(markerStation, markerLat, markerLng) {
         this.station = markerStation;
         this.stationLat = markerLat;
         this.stationLng = markerLng;
     },
-    createBooking: function(){
+    createBooking(){
         sessionStorage.setItem("station", this.station);
         sessionStorage.setItem("bookingDate", this.bookingDate);
         displayBookingInfo();
         this.startCountdow();
     }, 
-    startCountdow: function() {
+    startCountdow() {
         clearTimeout(timeOutVariable);
         bookingLimit = 20 * 60;
         setTimeout(countDown, 1000);
@@ -170,7 +188,7 @@ function countDown() {
 function initMap() {
     googleMap.init(document.getElementById("map"), 48.866667, 2.333333, 15);
     var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
-    googleMap.addMarker(apiUrl);
+    googleMap.getResponse(apiUrl);
 };
 
 
