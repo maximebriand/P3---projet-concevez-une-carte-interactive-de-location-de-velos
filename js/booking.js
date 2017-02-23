@@ -2,6 +2,11 @@ var googleMap = {
     map: null,
     localJson: [],
 
+<<<<<<< HEAD:js/booking.js
+=======
+
+
+>>>>>>> 58ea8d953896724421c64944c1f7e5e8135be68e:js/script.js
     init: function(mapElt, centerLat, centerLng, zoom, url ) {
         this.map = new google.maps.Map(mapElt, {
             center: {
@@ -11,6 +16,7 @@ var googleMap = {
             zoom: zoom
             
         });
+<<<<<<< HEAD:js/booking.js
         checkBooking(); //used to check if there is a booking
         bookingButtonClick(); //create a new booking each time the booking button is hitten
     },
@@ -29,6 +35,17 @@ var googleMap = {
         var tempTable = [];
         var me = this;//used to call the object
 
+=======
+
+        this.apiUrl = url
+        this.addMarker(this.apiUrl);
+        checkBooking(); //used to check if there is a booking
+        bookingButtonClick();
+    },
+
+
+    addMarker: function(url) {
+>>>>>>> 58ea8d953896724421c64944c1f7e5e8135be68e:js/script.js
         $.getJSON(url, function(json) {
             $.each(json, function(index, value) {
                 tempTable.push(json[index]);
@@ -140,9 +157,13 @@ function displayBookingInfo() {
     footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
 };
 
+<<<<<<< HEAD:js/booking.js
 var timeOutVariable;
 
 //Function to excecute when the map is initialize to check if there is already a booking in webstorage.
+=======
+ var timeOutVariable;
+>>>>>>> 58ea8d953896724421c64944c1f7e5e8135be68e:js/script.js
 function checkBooking() {
     var bookingPastTime = (Math.floor($.now()) / 1000) - (sessionStorage.getItem("bookingDate"));
    
@@ -160,10 +181,14 @@ function bookingButtonClick(){
     var bookingButton = $('#booking');
     bookingButton.click(function() {
         var superBooking = Object.create(newBooking); //create a booking object
+<<<<<<< HEAD:js/booking.js
         superBooking.initBooking(
             sessionStorage.getItem("stationSelectedMarker"), 
             sessionStorage.getItem("latSelectedMarker"), 
             sessionStorage.getItem("lngSelectedMarker"));
+=======
+        superBooking.initBooking(sessionStorage.getItem("stationSelectedMarker"), sessionStorage.getItem("latSelectedMarker"), sessionStorage.getItem("lngSelectedMarker"));
+>>>>>>> 58ea8d953896724421c64944c1f7e5e8135be68e:js/script.js
         superBooking.createBooking();
     })
 };
@@ -184,11 +209,21 @@ function countDown() {
     secondsSpan.html(seconds);  
 };
 
+<<<<<<< HEAD:js/booking.js
 //Google Map callback to initialize the map
 function initMap() {
     googleMap.init(document.getElementById("map"), 48.866667, 2.333333, 15);
     var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
     googleMap.getResponse(apiUrl);
+=======
+
+var myGoogleMap;
+function initMap() {
+    var apiUrl = "https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
+    myGoogleMap = Object.create(googleMap);
+    myGoogleMap.init(document.getElementById("map"), 48.866667, 2.333333, 15);
+    //myGoogleMap.addMarker(apiUrl);
+>>>>>>> 58ea8d953896724421c64944c1f7e5e8135be68e:js/script.js
 };
 
 
