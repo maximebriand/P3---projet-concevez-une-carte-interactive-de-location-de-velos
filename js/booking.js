@@ -1,3 +1,5 @@
+var bookedMarkerIndex;
+
 var googleMap = {
     map: null,
     localJson: [],
@@ -20,7 +22,7 @@ var googleMap = {
         var me = this;//used to call the object
         var table = this.localJson;
         $.each(table, function(index, value) {
-            googleMap.createMarker(table[index]);
+            googleMap.createMarker(table[index], index);
         });
     },
 
@@ -41,17 +43,22 @@ var googleMap = {
 
 
 
-    createMarker(stationsInfo) {
+    createMarker(stationsInfo, index) {
+        if (bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
+            googleMap.localJson[sessionStorage.getItem("indexSelectedMarker")].status = "BOOKED";
+        };
         NewMarker = new google.maps.LatLng(stationsInfo.position.lat, stationsInfo.position.lng);     
         this.displayMarker(NewMarker, stationsInfo.status, stationsInfo.available_bikes);
-        this.onMarkerClick(stationsInfo);
+        this.onMarkerClick(stationsInfo, index);
     },
 
     displayMarker(location, status, available) {
         var image;
         if (status === "OPEN" && available >= 1) {
             image = "css/img/pin_velib_open.png";
-        } else {
+        } else if (status === "BOOKED") {
+            image = "css/img/pin_velib_booked.png";
+        }else {
             image = "css/img/pin_velib_closed.png";
         }
 
@@ -62,7 +69,7 @@ var googleMap = {
         })
     },
 
-    onMarkerClick(clickedMarker) {
+    onMarkerClick(clickedMarker, index) {
         //on marker click
         google.maps.event.addListener(marker, 'click', function() {
   
@@ -79,6 +86,7 @@ var googleMap = {
                 bonus = clickedMarker.bonus;
                 name = clickedMarker.name;
                 status = clickedMarker.status;
+                index = index;
 
             if (places <= 1) { placesDescription = "</span> place à cette station</li>" } else { placesDescription = "</span> places à cette station</li>" };
             if (availableBikes <= 1) { availableBikesDescription = "</span> vélo de disponible</li>" } else { availableBikesDescription = "</span> vélos sont disponibles</li>" };
@@ -101,6 +109,7 @@ var googleMap = {
             sessionStorage.setItem("stationSelectedMarker", clickedMarker.name);
             sessionStorage.setItem("latSelectedMarker", clickedMarker.position.lat);
             sessionStorage.setItem("lngSelectedMarker", clickedMarker.position.lng);
+            bookedMarkerIndex = index;
         });
     }
 };
@@ -125,6 +134,9 @@ var newBooking = {
         sessionStorage.setItem("bookingDate", this.bookingDate);
         displayBookingInfo();
         this.startCountdow();
+
+        sessionStorage.setItem("indexSelectedMarker", bookedMarkerIndex);
+        googleMap.localJson[bookedMarkerIndex].status = "BOOKED";
     }, 
     startCountdow() {
         clearTimeout(timeOutVariable);
@@ -140,11 +152,11 @@ function displayBookingInfo() {
     footer.html("<p>1 vélo réservé à la station " + sessionStorage.getItem("station") + " pour <span id=\"minutes\"></span> minutes et <span id=\"seconds\"></span> secondes");
 };
 
-var timeOutVariable;
+var timeOutVariable, bookingPastTime;
 
 //Function to excecute when the map is initialize to check if there is already a booking in webstorage.
 function checkBooking() {
-    var bookingPastTime = (Math.floor($.now()) / 1000) - (sessionStorage.getItem("bookingDate"));
+    bookingPastTime = (Math.floor($.now()) / 1000) - (sessionStorage.getItem("bookingDate"));
    
     // IF SESSION OF 20 MINUTES IS STILL AVAILABLE WE DISPLAY THE VALUE IN THE FOOTER
     if (bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
