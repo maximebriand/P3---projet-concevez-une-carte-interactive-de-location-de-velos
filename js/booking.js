@@ -192,17 +192,24 @@ function checkBooking() {
     }
 }
 
-function bookingButtonClick(){
-    var bookingButton = $('#booking');
-    bookingButton.click(function() {
-        var superBooking = Object.create(newBooking); //create a booking object
-        superBooking.initBooking(
-            sessionStorage.getItem("stationSelectedMarker"), 
-            sessionStorage.getItem("latSelectedMarker"), 
-            sessionStorage.getItem("lngSelectedMarker"));
-        superBooking.createBooking();
+function bookingButtonClick() {
+
+    signBouton.click(function() {
+
+        if (dataUrl !== canvas.toDataURL()) {
+            var superBooking = Object.create(newBooking); //create a booking object
+            superBooking.initBooking(
+                sessionStorage.getItem("stationSelectedMarker"),
+                sessionStorage.getItem("latSelectedMarker"),
+                sessionStorage.getItem("lngSelectedMarker"));
+            superBooking.createBooking();
+        } else {
+            console.log("vous devez signer");
+        }
+
     })
 };
+
 
 function countDown() {
     bookingLimit--;
