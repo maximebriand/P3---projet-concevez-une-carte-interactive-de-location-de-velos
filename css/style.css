@@ -134,7 +134,7 @@ section.explain ul.slider_nav li.slider_nav {
 
 section.explain ul.slider_nav li.slider_nav.active {background: #e0dcdc;}
 
-section.map {
+body, section.map {
 	background: #97bf1b;
 	min-height: 540px;
 	padding-bottom: 60px;
