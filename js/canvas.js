@@ -11,6 +11,7 @@ var bookingBtn = $('#booking');
 var signBouton = $('#sign');
 bookingBtn.click(function(){
     var canvas = $('#canvas');
+    bookingBtn.hide();
     canvas.show();
     signBouton.show();
 })

@@ -190,6 +190,7 @@ canvas#canvas {
 	display: none;
 	background: #fff;
 	cursor: pointer;
+	margin-top: 15px;
 }
 
 
