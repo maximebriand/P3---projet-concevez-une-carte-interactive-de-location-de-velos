@@ -98,7 +98,7 @@ var googleMap = {
             var canvas, asideElement, bookingButton, address, places, availableBikes, availableBikeStands, banking, bonus,
                 name, placesDescription, availableBikesDescription, availableBikeStandsDescription;
                 
-                canvas = $('#canvas');
+                canvas = $('.canvas');
                 bookingButton = $('#booking');
                 asideElement = $("aside .content");
                 address = clickedMarker.address;

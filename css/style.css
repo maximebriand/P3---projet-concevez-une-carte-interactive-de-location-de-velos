@@ -208,9 +208,17 @@ footer {
 }
 
 @media screen and (max-width: 768px) {
+	header .logo {
+	    background-size: 87px 47px;
+	    margin-left: 15px;
+	}
+
+	header nav {padding-right: 15px;}
+	header nav li {margin: 0;}
+	header nav li:nth-child(2) {margin-left: 15px;}
 	section.explain{height: 50vh;}
 	section.map {
-	    height: 120vh;
+	    height: 100%;
 	    padding-bottom: 25px;
 	}
 	section .wrapper .map_with_infos {

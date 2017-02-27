@@ -1,6 +1,12 @@
 
 //https://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
 
+//Canvas Setup
+var canvas = $('#canvas')[0];
+var ctx = canvas.getContext("2d");
+ctx.strokeStyle = "#333";
+ctx.lineJoin = "round";
+ctx.lineWidth = 5;
 
 
 
@@ -10,19 +16,24 @@
 var bookingBtn = $('#booking');
 var signBouton = $('#sign');
 bookingBtn.click(function() {
-    var canvas = $('#canvas');
+    var canvasElt = $('#canvas');
     bookingBtn.hide();
-    canvas.show(function(){
-        if (isMobile) {
+    
+    if (isMobile) {
+        //canvasElt.replaceWith("<canvas id=\"canvas\" width=\"220px\" height=\"120px\"><p>Désolé, votre navigateur ne supporte pas Canvas. Mettez-vous à jour</p></canvas>");
+        //the element canvas is changed so it has to be defined again.
+        $('#canvas').show(function(){
             $(this).css({
                 "display": "block",
                 "margin" : "auto",
-                "margin-top" : "15px",
-                "width" : "300px"
+                "margin-top" : "15px"
             })
-        }
+            canvas = $('#canvas')[0];
+        })
+    } else {canvasElt.show(function(){canvas = $('#canvas')[0];});}
+    signBouton.show(function(){
+        $(this).css("display", "block");
     });
-    signBouton.show();
     if (isMobile) {
         $("aside").css({
             "height": "500px",
@@ -32,12 +43,6 @@ bookingBtn.click(function() {
 })
 
 
-//Canvas Setup
-var canvas = $('#canvas')[0];
-var ctx = canvas.getContext("2d");
-ctx.strokeStyle = "#333";
-ctx.lineJoin = "round";
-ctx.lineWidth = 5;
 
 //Mouse Input
 // Set up mouse events for drawing
