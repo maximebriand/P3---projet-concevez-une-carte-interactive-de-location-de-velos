@@ -9,11 +9,26 @@
 //display canvas and booking button
 var bookingBtn = $('#booking');
 var signBouton = $('#sign');
-bookingBtn.click(function(){
+bookingBtn.click(function() {
     var canvas = $('#canvas');
     bookingBtn.hide();
-    canvas.show();
+    canvas.show(function(){
+        if (isMobile) {
+            $(this).css({
+                "display": "block",
+                "margin" : "auto",
+                "margin-top" : "15px",
+                "width" : "300px"
+            })
+        }
+    });
     signBouton.show();
+    if (isMobile) {
+        $("aside").css({
+            "height": "500px",
+            "display": "block"
+        });
+    }
 })
 
 
