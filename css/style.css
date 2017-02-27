@@ -208,6 +208,7 @@ footer {
 }
 
 @media screen and (max-width: 768px) {
+	section.explain{height: 50vh;}
 	section.map {height: 100vh;}
 	section .map_with_infos {
 		flex-direction: column;
@@ -228,6 +229,7 @@ footer {
 			width: -ms-calc(100% - 50px);
 		display: block;
 		min-height: 240px;
+		margin-top: 40px;
 	}
 	footer {padding: 10px 25px 0}
 }
