@@ -139,12 +139,6 @@ function clearCanvas() {
 //store dataurl
 
 var dataUrl = canvas.toDataURL();
-console.log(dataUrl);
 
 
 
-
-
-$('#clearcanvas').click(function(){
-    clearCanvas();
-})

@@ -99,11 +99,11 @@ ul.slider {
 section.explain ul.slider li {
 	position: relative;
 	max-width: 1100px;
-	width: calc(100% - 140px);
-		width: -moz-calc(100% - 140px);
-		width: -o-calc(100% - 140px);
-		width: -webkit-calc(100% - 140px);
-		width: -ms-calc(100% - 140px);
+	width: calc(100vw - 140px);
+		width: -moz-calc(100vw - 140px);
+		width: -o-calc(100vw - 140px);
+		width: -webkit-calc(100vw - 140px);
+		width: -ms-calc(100vw - 140px);
 	height: 100%;
 	min-height: 300px;
 	padding: 70px;
@@ -232,5 +232,3 @@ footer {
 	footer {padding: 10px 25px 0}
 }
 
-
-.debug{padding: 70px}
