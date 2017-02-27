@@ -13,3 +13,5 @@ new booking = new BookingObject
 
 Add a different pin to identify booked station
 slider change the JS logic (jquery change the display in a wrong way)
+
+regarder pour ne pas tout supprimer puis tout remettre

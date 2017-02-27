@@ -1,4 +1,5 @@
-var bookedMarkerIndex;
+var bookedMarkerIndex, stationNumber, urlStation, specificStationData;
+var gmarkers = [];
 
 var googleMap = {
     map: null,
@@ -41,8 +42,6 @@ var googleMap = {
         this.localJson = tempTable;
     },
 
-
-
     createMarker(stationsInfo, index) {
         if (bookingPastTime < bookingLimit && sessionStorage.getItem("station")) {
             googleMap.localJson[sessionStorage.getItem("indexSelectedMarker")].status = "BOOKED";
@@ -67,6 +66,29 @@ var googleMap = {
             map: this.map,
             icon: image,
         })
+
+        gmarkers.push(marker);
+    },
+
+    unbookingChangeStatus(index) {
+        var me = this;
+        var stationByIndex = me.localJson[index];
+        stationNumber = stationByIndex.number;
+
+        urlStation = "https://api.jcdecaux.com/vls/v1/stations/" + stationNumber + "?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
+        $.getJSON(urlStation, function(json) {
+            specificStationData = json;
+        }).always(function() {
+            me.localJson[index].status = specificStationData.status;
+            me.replaceMarkers();
+        });
+    },
+
+    replaceMarkers() {
+        for (i = 0; i < gmarkers.length; i++) {
+            gmarkers[i].setMap(null);
+        }
+        this.addMarker();
     },
 
     onMarkerClick(clickedMarker, index) {
@@ -92,7 +114,7 @@ var googleMap = {
             if (availableBikes <= 1) { availableBikesDescription = "</span> vélo de disponible</li>" } else { availableBikesDescription = "</span> vélos sont disponibles</li>" };
             if (availableBikeStands <= 1) { availableBikeStandsDescription = "</span> emplacement de libre</li>" } else { availableBikeStandsDescription = "</span> emplacements sont libres</li>" }
             if (banking === true) { banking = "disponible" } else { banking = "indisponible" };
-            if (status === "OPEN") { status = "ouverte";} else { status = "fermée"; };
+            if (status === "OPEN" || "BOOKED") { status = "ouverte";} else { status = "fermée"; };
             bookingButton.hide();
             asideElement.empty();
             asideElement.append(
@@ -122,14 +144,14 @@ var newBooking = {
     stationLat: null,
     stationLng: null,
     bookingDate: Math.floor($.now() / 1000),
-    markerImg: "css/img/pin_velib_booked.png",
 
     initBooking(markerStation, markerLat, markerLng) {
         this.station = markerStation;
         this.stationLat = markerLat;
         this.stationLng = markerLng;
     },
-    createBooking(){
+    createBooking() {
+        var previousIndex = sessionStorage.getItem("indexSelectedMarker")
         sessionStorage.setItem("station", this.station);
         sessionStorage.setItem("bookingDate", this.bookingDate);
         displayBookingInfo();
@@ -137,13 +159,15 @@ var newBooking = {
 
         sessionStorage.setItem("indexSelectedMarker", bookedMarkerIndex);
         googleMap.localJson[bookedMarkerIndex].status = "BOOKED";
-    }, 
+        googleMap.unbookingChangeStatus(previousIndex);
+    },
     startCountdow() {
         clearTimeout(timeOutVariable);
         bookingLimit = 20 * 60;
         setTimeout(countDown, 1000);
     }
 }
+
 
 var bookingLimit = 20 * 60; // 20 minutes * 60 seconds
 var footer = $('footer div.wrapper');
@@ -195,6 +219,7 @@ function countDown() {
     minutesSpan.html(minutes);
     secondsSpan.html(seconds);  
 };
+
 
 //Google Map callback to initialize the map
 function initMap() {
