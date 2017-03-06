@@ -20,9 +20,7 @@ bookingBtn.click(function() {
     bookingBtn.hide();
     
     if (isMobile) {
-        //canvasElt.replaceWith("<canvas id=\"canvas\" width=\"220px\" height=\"120px\"><p>Désolé, votre navigateur ne supporte pas Canvas. Mettez-vous à jour</p></canvas>");
-        //the element canvas is changed so it has to be defined again.
-        $('#canvas').show(function(){
+        canvas.show(function(){
             $(this).css({
                 "display": "block",
                 "margin" : "auto",

@@ -18,7 +18,6 @@ var googleMap = {
         signButtonClick(); //create a new booking each time the booking button is hitten
     },
 
-
     addMarker() {
         var me = this;//used to call the object
         var table = this.localJson;
@@ -26,7 +25,6 @@ var googleMap = {
             googleMap.createMarker(table[index], index);
         });
     },
-
 
     getResponse(url) {
         var tempTable = [];
@@ -98,7 +96,7 @@ var googleMap = {
             var canvas, asideElement, bookingButton, address, places, availableBikes, availableBikeStands, banking, bonus,
                 name, placesDescription, availableBikesDescription, availableBikeStandsDescription;
                 
-                canvas = $('.canvas');
+                canvas = $('#canvas');
                 bookingButton = $('#booking');
                 asideElement = $("aside .content");
                 address = clickedMarker.address;

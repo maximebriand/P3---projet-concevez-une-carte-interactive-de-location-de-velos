@@ -7,6 +7,14 @@
 
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css"></style>
+
+	<script type="text/javascript">
+		function initMap() {
+		    initMap();
+		}
+		window.onload = initMap;
+	</script>
+
 </head>
 <body>
 	<header>
@@ -14,7 +22,7 @@
 			<div class="logo"></div>
 			<nav>
 				<ul>
-					<li><a href="#section_explain">Explication</a></li>
+					<li><a href="#section_explain">Explications</a></li>
 					<li><a href="#section_map">Réservation</a></li>
 				</ul>
 			</nav>
@@ -26,17 +34,43 @@
 			<div class="slider">
 				<ul class="slider">
 					<li class="slide">
-						<p>Bon on va créer un premier contenu histoire de</p>
+						<h4>Etape 1</h4>
+						<div>
+							<img src="css/img/img1.png">
+							<article>
+								<p>Sélectionnez une station à proximité de votre position en cliquant sur un logo vert</p>
+							</article>
+						</div>
 					</li>
 					<li class="slide">
-						<p>Et un second</p>
+						<h4>Etape 2</h4>
+						<div>
+							<img src="css/img/img2.png">
+							<article>
+								<p>Vous pouvez voir le nombre de vélos disponibles à la station. Il se peut qu'il n'y ai plus de vélo de disponible, mais dans ce cas le logo est rouge et non vert.</p>
+								<p>Pour réserver votre vélo cliquez sur le bouton "Reserver un vélo".</p>
+							</article>
+						</div>
 					</li>
 					<li class="slide">
-						<p>Et un troisieme</p>
+						<h4>Etape 3</h4>
+						<div>
+							<img src="css/img/img3.png">
+							<article>
+								<p>Une fois que vous avez cliquez sur le bouton, un champs de signature apparait. Apposez votre signature puis validez votre contrat de location en cliquant sur signer.</p>
+							</article> 
+						</div>
 					</li>
 					<li class="slide">
-						<p>Et un quatrieme</p>
-					</li>					
+						<h4>Etape 4</h4>
+						<div>
+							<img src="css/img/img4.png">
+							<article>
+								<p>Votre réservation est validée. Un compteur dans le bandeau bleu vous indique la durée restante avant expiration de celle-ci.</p>
+								<p>Vous pouvez retrouver la situation du vélo sur la carte, grâce au logo jaune.</p>
+							</article>
+						</div>
+					</li>				
 				</ul>
 				<!-- <nav class="slider">
 					<ul class="slider_nav">
@@ -75,7 +109,7 @@
 	</footer>
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASmGFQwqU9iDLdHePkcv1ixK4ECy80afc&callback=initMap">
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASmGFQwqU9iDLdHePkcv1ixK4ECy80afc">
 	</script>
 	<script src="js/canvas.js"></script>
 	<script src="js/slider.js"></script>

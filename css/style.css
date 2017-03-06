@@ -63,6 +63,20 @@ section.explain div.slider {
 		height: -webkit-calc(100% - 120px);
 		height: -ms-calc(100% - 120px);
 }
+
+section.explain ul li h4 {
+	font-size: 22px;
+	margin-bottom: 15px;
+}
+
+section.explain ul li div {
+	display: flex;
+}
+section.explain ul li p {margin-left: 15px;}
+section.explain ul li img {
+	max-width: 80%;
+	height: auto;
+}
 section.explain .arrow {
 	position: absolute;
 	width: 60px;
@@ -216,7 +230,13 @@ footer {
 	header nav {padding-right: 15px;}
 	header nav li {margin: 0;}
 	header nav li:nth-child(2) {margin-left: 15px;}
-	section.explain{height: 50vh;}
+	
+	section.explain{height: 100%;}
+	section.explain ul li h4 {font-size: 18px;}
+	section.explain ul li div {flex-direction: column;}
+	section.explain ul li p {margin: 15px auto auto auto;}
+	section.explain ul li img {max-width: 100%;}
+
 	section.map {
 	    height: 100%;
 	    padding-bottom: 25px;
