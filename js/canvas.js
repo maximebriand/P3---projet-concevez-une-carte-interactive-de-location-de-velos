@@ -20,7 +20,7 @@ bookingBtn.click(function() {
     bookingBtn.hide();
     
     if (isMobile) {
-        canvas.show(function(){
+        canvasElt.show(function(){
             $(this).css({
                 "display": "block",
                 "margin" : "auto",
