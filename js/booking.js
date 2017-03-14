@@ -129,7 +129,7 @@ var googleMap = {
             asideElement.empty();
             asideElement.append(
                 "<h3 class=\"available_bikes\">Station : <span>" + name + "</span></h3> <ul>" +
-                "<li class=\"available_bikes\">La station est <span>" + status + "</span></li>" +
+                "<li class=\"available_bikes\">La station est <span>" + statusMarker + "</span></li>" +
                 "<li class=\"available_bikes\">Adresse : <span>" + address + "</span></li>" +
                 "<li class=\"available_bikes\"><span>" + places + " " + placesDescription +
                 "<li class=\"available_bikes\"><span>" + availableBikes + " " + availableBikesDescription +
