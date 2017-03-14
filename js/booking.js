@@ -70,16 +70,21 @@ var googleMap = {
 
     unbookingChangeStatus(index) {
         var me = this;
-        var stationByIndex = me.localJson[index];
-        stationNumber = stationByIndex.number;
+        if (index) {
+            var stationByIndex = me.localJson[index];
+            stationNumber = stationByIndex.number;
 
-        urlStation = "https://api.jcdecaux.com/vls/v1/stations/" + stationNumber + "?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
-        $.getJSON(urlStation, function(json) {
-            specificStationData = json;
-        }).always(function() {
-            me.localJson[index].status = specificStationData.status;
+            urlStation = "https://api.jcdecaux.com/vls/v1/stations/" + stationNumber + "?contract=Paris&apiKey=1ee25283f155079a4b54ddab39eac6d733b1fa49";
+            $.getJSON(urlStation, function(json) {
+                specificStationData = json;
+            }).always(function() {
+                me.localJson[index].status = specificStationData.status;
+                me.replaceMarkers();
+            });
+        } else {
             me.replaceMarkers();
-        });
+        }
+
     },
 
     replaceMarkers() {
