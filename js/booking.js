@@ -11,7 +11,8 @@ var googleMap = {
                 lat: centerLat, 
                 lng: centerLng
             },
-            zoom: zoom
+            zoom: zoom,
+            styles: [{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"on"},{"lightness":33}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2e5d4"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c5dac6"},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"off"},{"lightness":20}]},{"featureType":"road","elementType":"all","stylers":[{"lightness":20},{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#c5c6c6"},{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#e4d7c6"},{"visibility":"on"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#d7b79c"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"on"},{"color":"#acbcc9"}]}]
             
         });
         checkBooking(); //used to check if there is a booking
@@ -59,10 +60,15 @@ var googleMap = {
             image = "css/img/pin_velib_closed.png";
         }
 
+        var icon = {
+            url: image,
+            scaledSize: new google.maps.Size(38, 38), // scaled size
+        }
+
         marker = new google.maps.Marker({
             position: location,
             map: this.map,
-            icon: image,
+            icon: icon
         })
 
         gmarkers.push(marker);
