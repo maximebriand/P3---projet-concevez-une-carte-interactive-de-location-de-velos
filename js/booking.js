@@ -23,7 +23,7 @@ var googleMap = {
         var me = this;//used to call the object
         var table = this.localJson;
         $.each(table, function(index, value) {
-            googleMap.createMarker(table[index], index);
+            me.createMarker(table[index], index);
         });
     },
 
@@ -52,17 +52,20 @@ var googleMap = {
 
     displayMarker(location, status, available) {
         var image;
+        var iconSize = new google.maps.Size(38, 38); // scaled size
+
         if (status === "OPEN" && available >= 1) {
             image = "css/img/pin_velib_open.png";
         } else if (status === "BOOKED") {
             image = "css/img/pin_velib_booked.png";
+            iconSize = new google.maps.Size(45, 45);
         }else {
             image = "css/img/pin_velib_closed.png";
         }
 
         var icon = {
             url: image,
-            scaledSize: new google.maps.Size(38, 38), // scaled size
+            scaledSize: iconSize
         }
 
         marker = new google.maps.Marker({
@@ -254,6 +257,8 @@ function initMap() {
     googleMap.getResponse(apiUrl);
 };
 
+
+//for mobile screen 
 var isMobile = false; //initiate as false
 // device detection
 if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
