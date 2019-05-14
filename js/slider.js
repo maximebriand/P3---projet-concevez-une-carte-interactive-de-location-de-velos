@@ -1,41 +1,47 @@
-//SLIDER
-var slideIndex, clickedArrow;
-slideIndex = 1;
-clickedArrow = $('.arrow');
+function Slider() {
 
-displaySlide(slideIndex);
-
-clickedArrow.click(function(){
-    if ($(this).hasClass( "next" )) {
-        changeSlide(1);
-    } if ($(this).hasClass( "previous" )) {
-        changeSlide(-1);
+    this.init = function () {
+        for (var i=1; i <= $('.slider__slide').length; i++){
+            $('.slider__indicators').append('<div class="slider__indicator" data-slide="'+i+'"></div>')
+        }
+        this.startSlider();
+        this.automatic();
     }
-});
 
-$(document).keydown(function(keyboard){
-   switch (keyboard.which){
-     case 37: // left arrow
-       changeSlide(-1);
-       break;
-     case 39: // right arrow
-       changeSlide(1);
-       break;
-   }
-}); 
-
-function changeSlide(n) {
-  displaySlide(slideIndex += n);
-}
-
-function displaySlide(n) {
-    var i;
-    var numberSlides = $(".slide");
-    if (n > numberSlides.length) { slideIndex = 1 } //if slide index is bigger than number of slides we go back to the first one
-    if (n < 1) { slideIndex = numberSlides.length } //if slide index is lower than 1 we go to the last one
-    for (i = 0; i < numberSlides.length; i++) {
-        $(numberSlides[i]).hide(500, "linear");
+    this.startSlider = function () {
+        setTimeout(function(){
+            $('.slider__wrap').addClass('slider__wrap--hacked');
+            this.animate();
+            this.goToSlide(this.currentSlide);
+        }.bind(this), 1000);
+        this.clickNext();
     }
-    $(numberSlides[slideIndex - 1]).show(100, "linear");
-    
+
+    this.goToSlide = function(number){
+        $('.slider__slide').removeClass('slider__slide--active');
+        $('.slider__slide[data-slide='+number+']').addClass('slider__slide--active');
+    }
+    this.automatic = function () {
+        setTimeout(function () {
+            this.animate();
+            this.goToSlide(this.currentSlide);
+            this.automatic();
+        }.bind(this), 5500)
+    }
+    this.animate = function () {
+        this.currentSlide = Number($('.slider__slide--active').data('slide'));
+        var totalSlides = $('.slider__slide').length;
+        this.currentSlide++
+        if (this.currentSlide > totalSlides){
+            this.currentSlide = 1;
+        }
+    }
+    this.clickNext = function () {
+        $('.slider__next, .go-to-next').on('click', function(){
+            this.animate();
+            this.goToSlide(this.currentSlide);
+        }.bind(this))
+    }
+
+    this.init();
 }

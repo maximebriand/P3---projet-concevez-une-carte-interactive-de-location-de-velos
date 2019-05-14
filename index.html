@@ -8,6 +8,7 @@
 
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/slider.css">
 
 	</head>
 <body>
@@ -23,60 +24,58 @@
 		</div>
 	</header>
 	<section class="explain" id="section_explain">
-		<div class="wrapper">
 			<h1>Réservez votre Vélib' facilement et rapidement ici !</h1>
+
+
+
+
 			<div class="slider">
-				<ul class="slider">
-					<li class="slide">
-						<h4>Etape 1</h4>
-						<div>
-							<img src="css/img/img1.png">
+				<div class="slider__slide slider__slide--active" data-slide="1">
+					<div class="slider__wrap">
+						<div class="slider__back" style="background-image: url('css/img/img1.png')"></div>
+					</div>
+					<div class="slider__inner" style="background-image: url('css/img/img1.png')">
+						<div class="slider__content">
 							<article>
 								<p>Sélectionnez une station à proximité de votre position en cliquant sur un logo vert</p>
 							</article>
 						</div>
-					</li>
-					<li class="slide">
-						<h4>Etape 2</h4>
-						<div>
-							<img src="css/img/img2.png">
+					</div>
+				</div>
+				<div class="slider__slide" data-slide="2">
+					<div class="slider__wrap">
+						<div class="slider__back" style="background-image: url('css/img/img2.png')"></div>
+					</div>
+					<div class="slider__inner"  style="background-image: url('css/img/img2.png')">
+						<div class="slider__content">
 							<article>
 								<p>Vous pouvez voir le nombre de vélos disponibles à la station. Il se peut qu'il n'y ai plus de vélo de disponible, mais dans ce cas le logo est rouge et non vert.</p>
 								<p>Pour réserver votre vélo cliquez sur le bouton "Reserver un vélo".</p>
 							</article>
 						</div>
-					</li>
-					<li class="slide">
-						<h4>Etape 3</h4>
-						<div>
-							<img src="css/img/img3.png">
-							<article>
-								<p>Une fois que vous avez cliquez sur le bouton, un champs de signature apparait. Apposez votre signature puis validez votre contrat de location en cliquant sur signer.</p>
-							</article> 
-						</div>
-					</li>
-					<li class="slide">
-						<h4>Etape 4</h4>
-						<div>
-							<img src="css/img/img4.png">
+					</div>
+				</div>
+				<div class="slider__slide" data-slide="3">
+					<div class="slider__wrap">
+						<div class="slider__back"  style="background-image: url('css/img/img3.png')"></div>
+					</div>
+					<div class="slider__inner"  style="background-image: url('css/img/img3.png')">
+						<div class="slider__content">
 							<article>
 								<p>Votre réservation est validée. Un compteur dans le bandeau bleu vous indique la durée restante avant expiration de celle-ci.</p>
 								<p>Vous pouvez retrouver la situation du vélo sur la carte, grâce au logo jaune.</p>
 							</article>
 						</div>
-					</li>				
-				</ul>
-				<!-- <nav class="slider">
-					<ul class="slider_nav">
-						<li class="slider_nav"></li>
-						<li class="slider_nav active"></li>
-						<li class="slider_nav"></li>
-						<li class="slider_nav"></li>
-					</ul>
-				</nav> -->
-				<a class="arrow previous">&#9001;</a>
-				<a class="arrow next">&#9002;</a>
+					</div>
+				</div>
+				<div class="slider__navigation">
+					<a class="go-to-next navigation">next</a>
+				</div>
 			</div>
+
+
+
+
 		</div>
 	</section>
 	<section class="map" id="section_map">

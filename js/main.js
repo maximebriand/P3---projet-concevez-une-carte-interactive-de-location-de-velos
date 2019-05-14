@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    var startingBooking = new Booking();
+    const mySlider = new Slider();
+    const startingBooking = new Booking();
     startingBooking.checkBooking();
 
     function initMapNantes() {
