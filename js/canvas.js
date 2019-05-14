@@ -1,162 +1,129 @@
 
-//https://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
+function Canvas(isMobile){
 
-//Canvas Setup
-var canvas = $('#canvas')[0];
-var ctx = canvas.getContext("2d");
-ctx.strokeStyle = "#333";
-ctx.lineJoin = "round";
-ctx.lineWidth = 5;
+    this.canvas = $('#canvas')[0];
+    this.canvasElt = $('#canvas');
+    this.signButton = $('#sign');
+    this.ctx = this.canvas.getContext("2d");
+    this.ctx.strokeStyle = "#333";
+    this.ctx.lineJoin = "round";
+    this.ctx.lineWidth = 3;
+    this.isMobile = isMobile;
 
-
-
-
-
-//display canvas and booking button
-var bookingBtn = $('#booking');
-var signBouton = $('#sign');
-bookingBtn.click(function() {
-    var canvasElt = $('#canvas');
-    bookingBtn.hide();
+    this.drawing = false;
+    this.mousePos = { x:0, y:0 };
+    this.lastPos = this.mousePos;
     
-    if (isMobile) {
-        canvasElt.show(function(){
-            $(this).css({
-                "display": "block",
-                "margin" : "auto",
-                "margin-top" : "15px"
-            })
-            canvas = $('#canvas')[0];
-        })
-    } else {canvasElt.show(function(){canvas = $('#canvas')[0];});}
-    signBouton.show(function(){
-        $(this).css("display", "block");
-    });
-    if (isMobile) {
-        $("aside").css({
-            "height": "500px",
-            "display": "block"
-        });
+    this.init = function () {
+        this.canvasElt.show();
+        this.signButton.show();
+        this.mouseDown();
+        this.mouseUp();
+        this.mouseMove();
+        this.touchStart();
+        this.touchEnd();
+        this.touchMove();
+        this.scrollStart();
+        this.scrollEnd();
+        this.scrollMove();
     }
-})
+
+    this.mouseDown = function(){
+        this.canvas.addEventListener("mousedown", function(e){
+            this.drawing = true;
+            this.lastPos = this.getMousePos(this.canvas, e);
+        }.bind(this));
+    },
+
+    this.mouseUp = function(){
+        this.canvas.addEventListener("mouseup", function(e){
+            this.drawing = false;
+        }.bind(this));
+    },
+
+    this.mouseMove = function(){
+        this.canvas.addEventListener("mousemove", function(e){
+            this.mousePos = this.getMousePos(this.canvas, e);
+            this.renderCanvas();
+        }.bind(this));
+    },
+
+    this.getMousePos = function(canvasDom, mouseEvent){
+        let rect = canvasDom.getBoundingClientRect(); // renvoie la taille et la position du canvas par rapport à la zone d'affichage
+        return {
+            x: mouseEvent.clientX - rect.left,
+            y: mouseEvent.clientY - rect.top
+        };
+    },
+
+    this.renderCanvas = function(){
+        if(this.drawing){
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
+            this.ctx.lineTo(this.mousePos.x, this.mousePos.y);
+            this.ctx.stroke();
+            this.lastPos = this.mousePos;
+        }
+    },
 
 
+    this.touchStart = function(){
+        this.canvas.addEventListener("touchstart", function(e){
+            this.drawing = true;
+            this.lastPos = this.getTouchPos(this.canvas, e);
+        }.bind(this), {passive: true});
+    },
 
-//Mouse Input
-// Set up mouse events for drawing
-var drawing = false;
-var mousePos = { x:0, y:0 };
-var lastPos = mousePos;
-canvas.addEventListener("mousedown", function (e) {
-        drawing = true;
-  lastPos = getMousePos(canvas, e);
-}, false);
-canvas.addEventListener("mouseup", function (e) {
-  drawing = false;
-}, false);
-canvas.addEventListener("mousemove", function (e) {
-  mousePos = getMousePos(canvas, e);
-}, false);
+    this.touchEnd = function(){
+        this.canvas.addEventListener("touchend", function(){
+            this.drawing = false;
+        }.bind(this));
+    },
 
-// Get the position of the mouse relative to the canvas
-function getMousePos(canvasDom, mouseEvent) {
-  var rect = canvasDom.getBoundingClientRect();
-  return {
-    x: mouseEvent.clientX - rect.left,
-    y: mouseEvent.clientY - rect.top
-  };
+    this.touchMove = function(){
+        this.canvas.addEventListener("touchmove", function(e){
+            this.mousePos = this.getTouchPos(this.canvas, e);
+            this.renderCanvas();
+        }.bind(this), {passive: true});
+    },
+
+    this.getTouchPos = function(canvasDom, touchEvent){
+        let rect = canvasDom.getBoundingClientRect();
+        return {
+            x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top
+        };
+    },
+
+    this.scrollStart = function(){
+        window.addEventListener("touchstart", function(e){
+            if(e.target === this.canvas){
+                e.preventDefault();
+            }
+        }.bind(this), {passive: false});
+    },
+
+    this.scrollEnd = function(){
+        window.addEventListener("touchend", function(e){
+            if(e.target === this.canvas){
+                e.preventDefault();
+            }
+        }.bind(this));
+    },
+
+    this.scrollMove = function(){
+        window.addEventListener("touchmove", function(e){
+            if(e.target === this.canvas){
+                e.preventDefault();
+            }
+        }.bind(this), {passive: false});
+    },
+
+    this.init();
 }
 
-//Drawing
-// Get a regular interval for drawing to the screen
-window.requestAnimFrame = (function (callback) {
-        return window.requestAnimationFrame || 
-           window.webkitRequestAnimationFrame ||
-           window.mozRequestAnimationFrame ||
-           window.oRequestAnimationFrame ||
-           window.msRequestAnimaitonFrame ||
-           function (callback) {
-        window.setTimeout(callback, 1000/60);
-           };
-})();
 
 
-// Draw to the canvas
-function renderCanvas() {
-  if (drawing) {
-    ctx.moveTo(lastPos.x, lastPos.y);
-    ctx.lineTo(mousePos.x, mousePos.y);
-    ctx.stroke();
-    lastPos = mousePos;
-  }
-}
-
-// Allow for animation
-(function drawLoop () {
-  requestAnimFrame(drawLoop);
-  renderCanvas();
-})();
-
-
-//Touch Input
-// Set up touch events for mobile, etc
-canvas.addEventListener("touchstart", function (e) {
-        mousePos = getTouchPos(canvas, e);
-  var touch = e.touches[0];
-  var mouseEvent = new MouseEvent("mousedown", {
-    clientX: touch.clientX,
-    clientY: touch.clientY
-  });
-  canvas.dispatchEvent(mouseEvent);
-}, false);
-canvas.addEventListener("touchend", function (e) {
-  var mouseEvent = new MouseEvent("mouseup", {});
-  canvas.dispatchEvent(mouseEvent);
-}, false);
-canvas.addEventListener("touchmove", function (e) {
-  var touch = e.touches[0];
-  var mouseEvent = new MouseEvent("mousemove", {
-    clientX: touch.clientX,
-    clientY: touch.clientY
-  });
-  canvas.dispatchEvent(mouseEvent);
-}, false);
-
-// Get the position of a touch relative to the canvas
-function getTouchPos(canvasDom, touchEvent) {
-  var rect = canvasDom.getBoundingClientRect();
-  return {
-    x: touchEvent.touches[0].clientX - rect.left,
-    y: touchEvent.touches[0].clientY - rect.top
-  };
-}
-
-// Prevent scrolling when touching the canvas
-document.body.addEventListener("touchstart", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-document.body.addEventListener("touchend", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-document.body.addEventListener("touchmove", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-
-//clear the canvas
-function clearCanvas() {
-    canvas.width = canvas.width;
-    ctx.lineWidth = 5;
-}
-
-//store dataurl
-
-var dataUrl = canvas.toDataURL();
 
 
 
