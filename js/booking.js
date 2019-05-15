@@ -5,6 +5,7 @@ function Booking (station) {
 
     this.init = function (station){
         this.station = station;
+        this.bookingLimit = 20 * 60;
         this.createBooking();
     }
 

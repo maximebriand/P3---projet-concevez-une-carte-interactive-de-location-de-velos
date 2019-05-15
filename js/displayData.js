@@ -45,19 +45,19 @@ function displayData(station, startingBooking) {
             "<li class=\"available_bikes\">Le paiement à cette station est <span>" + this.banking + "</span></li></ul>"
         );
         if (this.statusMarker === "ouverte" && this.availableBikes >= 1 && status !== "BOOKED") { this.bookingButton.show(); }
-        else if (this.status === "BOOKED") {this.asideElement.append("<p class=\"alert\">Vous avez déjà une réservation en cours pour cette station</p>")}
-
-        sessionStorage.setItem("stationSelectedMarker", this.name);
-        sessionStorage.setItem("latSelectedMarker", station.position.lat);
-        sessionStorage.setItem("lngSelectedMarker", station.position.lng);
+        else if (this.station.name === JSON.parse(localStorage.getItem('station').name)) {alert('Vous avez déjà une réservation à cette station.')}
 
         this.bookingButton.on('click', function(){
-            var canvas = new Canvas(this.isMobile);
-        })
+            this.canvas = new Canvas(this.isMobile);
+        }.bind(this));
 
         this.signBouton.on('click', function(){
-            this.startingBooking.init(station);
-        }.bind(this))
+            this.canvas.isEmpty() ? this.alert() :  this.startingBooking.init(station);
+        }.bind(this));
+    }
+    
+    this.alert = function () {
+        alert("Vous devez signer");
     }
 
     this.displayMobileElt = function() {
