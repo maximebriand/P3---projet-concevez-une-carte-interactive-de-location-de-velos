@@ -13,7 +13,7 @@ function Slider() {
             $('.slider__wrap').addClass('slider__wrap--hacked');
             this.animate();
             this.goToSlide(this.currentSlide);
-        }.bind(this), 1000);
+        }.bind(this), 5000);
         this.clickNext();
     }
 
