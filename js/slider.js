@@ -3,9 +3,7 @@ function Slider() {
     this.init = function () {
         for (var i=1; i <= $('.slider__slide').length; i++){
             $('.slider__indicators').append('<div class="slider__indicator" data-slide="'+i+'"></div>')
-        }
-        this.startSlider();
-        this.automatic();
+        }this.automatic();
     }
 
     this.startSlider = function () {

@@ -2,6 +2,7 @@
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
 
 html {font-family: 'Open Sans', sans-serif;}
+body{background-color:#fff;}
 .wrapper {
 	max-width: 1240px;
 	margin:auto;
@@ -10,19 +11,21 @@ header {
 	position: fixed;
 	width: 100%;
 	height: 90px;
-	background: rgba(255,255,255,0.85);
+	background: #fff;
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 	z-index: 20;
 }
 header a{color: #333;}
 header .wrapper {
 	display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 	padding: 10px 0;
 }
 header .logo {
-	height: 50px;
-	width: 115px;
-	background: url('img/velib-paris-small.png') no-repeat;
+	height: 75px;
+	width: 155px;
+	background: url('img/logo-contract.png') no-repeat;
 }
 header nav {line-height: 70px;}
 header nav ul {display: flex;}
@@ -30,8 +33,8 @@ header nav li {margin-left: 25px;}
 header nav li a {text-decoration: none;}
 header nav li a:hover {
 	text-decoration: none;
-	border-bottom: 1px solid #97bf1b;
-	color: #97bf1b;
+	border-bottom: 1px solid #e06517;
+	color: #e06517;
 }
 
 h1 {
@@ -50,7 +53,7 @@ section.explain	{
 	position: relative;
 	color: #e0dcdc;
 	padding-top: 120px;
-	background: #ab3636;
+	background: #e06517;
 	min-height: 90vh;
 	overflow: hidden;
 }
@@ -58,7 +61,6 @@ section.explain .wrapper {height: 100%;}
 
 
 body, section.map {
-	background: #97bf1b;
 	min-height: 540px;
 	padding-bottom: 60px;
 }
@@ -81,7 +83,7 @@ aside {
 		min-height: -o-calc(90% - 50px);
 		min-height: -webkit-calc(90% - 50px);
 		min-height: -ms-calc(90% - 50px);
-	background: #00abc6;
+	background: #e06517;
 	color: #fff;
 	padding: 25px; 
 }
@@ -96,7 +98,7 @@ h3 {
 aside li {margin-bottom: 4px;}
 aside button#booking {display: none;}
 aside button, #sign {
-	background: #04404a;
+	background: #993309;
 	color: #fff;
 	border: none;
 	padding: 10px;
@@ -105,7 +107,7 @@ aside button, #sign {
 	cursor: pointer;
 }
 aside .alert {
-	background: #e04545;
+	background: #e06517;
 	padding: 5px 0;
 }
 #sign {display: none;}
@@ -118,7 +120,7 @@ canvas#canvas {
 
 
 footer {
-	background: #005eaf;
+	background: #993309;
 	height: 50px;
 	color: #fff;
 	font-size: 15px;
@@ -128,6 +130,7 @@ footer {
 	bottom: 0;
 	left: 0;
 	right: 0;
+
 }
 
 @media screen and (max-width: 768px) {
